@@ -58,13 +58,19 @@ add_library(qpg6100-driver INTERFACE)
 
 if (OT_MTD)
     target_link_libraries(qpg6100-driver
-        INTERFACE
+        INTERFACE 
+            -Wl,--start-group
             ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libQorvoQPG6100_mtd.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libmbedtls_alt.a
+            -Wl,--end-group
     )
 else()
     target_link_libraries(qpg6100-driver
         INTERFACE
+            -Wl,--start-group
             ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libQorvoQPG6100_ftd.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libmbedtls_alt.a
+            -Wl,--end-group
     )
 endif()
 
