@@ -29,8 +29,7 @@
 #ifndef QGP6100_MBEDTLS_CONFIG_H
 #define QGP6100_MBEDTLS_CONFIG_H
 
-#ifdef QORVO_CRYPTO_ENGINE
-
+// Use Qorvo HW crypto support
 #undef MBEDTLS_ECP_WINDOW_SIZE
 #undef MBEDTLS_ECP_FIXED_POINT_OPTIM
 
@@ -39,13 +38,6 @@
 #define MBEDTLS_ECP_ALT
 #define MBEDTLS_ECJPAKE_ALT
 #define MBEDTLS_SHA256_ALT
-
-#else
-
-#define MBEDTLS_SLOW_CPU 1
-#define MBEDTLS_COMPUTATION_UNTILL_SEQ_NR 6
-
-#endif // QORVO_CRYPTO_ENGINE
 
 #include "mbedtls/check_config.h"
 
