@@ -48,7 +48,7 @@ die()
 
 build()
 {
-    local builddir="${OT_CMAKE_BUILD_DIR:-build}"
+    builddir="${OT_CMAKE_BUILD_DIR:-build}"
 
     mkdir -p "${builddir}"
     cd "${builddir}"
@@ -89,6 +89,13 @@ main()
 
     options+=("$@")
     build -DQORVO_PLATFORM="${platform}" "${options[@]}"
+
+    case "${platform}" in
+        qpg6095 | qpg6100)
+            find "./${builddir}/bin" -type f -executable -not -name '*.*' -not -name "${platform}-*" -execdir arm-none-eabi-objcopy -O ihex {} {}.hex \;
+            ;;
+    esac
+    find "./${builddir}/bin" -type f -not -name "${platform}-*" -execdir sh -c 'x="$1"; mv "$x" "$2-$(basename ${x})"' _ {} "${platform}" \;
 }
 
 main "$@"
