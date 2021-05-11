@@ -26,64 +26,71 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-add_library(gp712-driver INTERFACE)
+message(STATUS "Qorvo ${QORVO_PLATFORM} libs in ${SDK_DIR}")
 
-if (OT_MTD)
-    target_link_libraries(gp712-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/gp712/lib/libQorvoGP712_mtd.a
-    )
-else()
-    target_link_libraries(gp712-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/gp712/lib/libQorvoGP712_ftd.a
-    )
+if (QORVO_PLATFORM MATCHES "gp712")
+    add_library(gp712-driver INTERFACE)
+
+    if (OT_MTD)
+        target_link_libraries(gp712-driver
+            INTERFACE
+                ${SDK_DIR}/gp712/lib/libQorvoGP712_mtd.a
+        )
+    else()
+        target_link_libraries(gp712-driver
+            INTERFACE
+                ${SDK_DIR}/gp712/lib/libQorvoGP712_ftd.a
+        )
+    endif()
 endif()
 
-add_library(qpg6095-driver INTERFACE)
+if (QORVO_PLATFORM MATCHES "qpg6095")
+    add_library(qpg6095-driver INTERFACE)
 
-if (OT_MTD)
-    target_link_libraries(qpg6095-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6095/lib/libQorvoQPG6095_mtd.a
-    )
-else()
-    target_link_libraries(qpg6095-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6095/lib/libQorvoQPG6095_ftd.a
-    )
+    if (OT_MTD)
+        target_link_libraries(qpg6095-driver
+            INTERFACE
+                ${SDK_DIR}/qpg6095/lib/libQorvoQPG6095_mtd.a
+        )
+    else()
+        target_link_libraries(qpg6095-driver
+            INTERFACE
+                ${SDK_DIR}/qpg6095/lib/libQorvoQPG6095_ftd.a
+        )
+    endif()
 endif()
 
-add_library(qpg6100-driver INTERFACE)
+if (QORVO_PLATFORM MATCHES "qpg6100")
+    add_library(qpg6100-driver INTERFACE)
+    set(MBEDTLSALT "${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a")
 
-if (OT_MTD)
-    target_link_libraries(qpg6100-driver
-        INTERFACE 
-            -Wl,--start-group
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libQorvoQPG6100_mtd.a
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libmbedtls_alt.a
-            -Wl,--end-group
-    )
-else()
-    target_link_libraries(qpg6100-driver
-        INTERFACE
-            -Wl,--start-group
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libQorvoQPG6100_ftd.a
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg6100/lib/libmbedtls_alt.a
-            -Wl,--end-group
-    )
+    if (OT_MTD)
+        target_link_libraries(qpg6100-driver
+            INTERFACE
+                ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_mtd.a
+                ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
+        )
+    else()
+        target_link_libraries(qpg6100-driver
+            INTERFACE
+                ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_ftd.a
+                ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
+        )
+    endif()
 endif()
 
-add_library(qpg7015m-driver INTERFACE)
+if (QORVO_PLATFORM MATCHES "qpg7015m")
+    add_library(qpg7015m-driver INTERFACE)
 
-if (OT_MTD)
-    target_link_libraries(qpg7015m-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg7015m/lib/libQorvoQPG7015M_mtd.a
-    )
-else()
-    target_link_libraries(qpg7015m-driver
-        INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/repo/qpg7015m/lib/libQorvoQPG7015M_ftd.a
-    )
+    if (OT_MTD)
+        target_link_libraries(qpg7015m-driver
+            INTERFACE
+                ${SDK_DIR}/qpg7015m/lib/libQorvoQPG7015M_mtd.a
+        )
+    else()
+        target_link_libraries(qpg7015m-driver
+            INTERFACE
+                ${SDK_DIR}/qpg7015m/lib/libQorvoQPG7015M_ftd.a
+        )
+    endif()
 endif()

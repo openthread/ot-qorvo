@@ -45,7 +45,7 @@ endif()
 
 add_library(openthread-gp712
     alarm.c
-    diag.c     
+    diag.c
     entropy.c
     flash.c
     logging.c
@@ -64,9 +64,11 @@ set_target_properties(
 
 target_link_libraries(openthread-gp712
     PRIVATE
+        -Wl,--start-group
         gp712-driver
         ${OT_MBEDTLS}
         ot-config
+        -Wl,--end-group
     PUBLIC
         -lrt
         -pthread
@@ -87,7 +89,7 @@ target_compile_options(openthread-gp712
 target_include_directories(openthread-gp712
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
-        ${PROJECT_SOURCE_DIR}/openthread/examples/platforms
+        ${OPENTHREAD_DIR}/examples/platforms
 )
 
 target_include_directories(ot-config INTERFACE ${OT_PUBLIC_INCLUDES})
