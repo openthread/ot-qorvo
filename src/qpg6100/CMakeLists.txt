@@ -64,11 +64,13 @@ set_target_properties(
 
 target_link_libraries(openthread-qpg6100
     PRIVATE
+        -Wl,--start-group
         qpg6100-driver
         ${OT_MBEDTLS}
         ot-config
+        -Wl,--end-group
     PUBLIC
-        -T${PROJECT_SOURCE_DIR}/third_party/Qorvo/repo/qpg6100/ld/qpg6100.ld
+        -T${SDK_DIR}/qpg6100/ld/qpg6100.ld
         -nostdlib
         -Wl,--gc-sections
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map,--cref
@@ -87,7 +89,7 @@ target_compile_options(openthread-qpg6100
 target_include_directories(openthread-qpg6100
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
-        ${PROJECT_SOURCE_DIR}/openthread/examples/platforms
+        ${OPENTHREAD_DIR}/examples/platforms
 )
 
 target_include_directories(ot-config INTERFACE ${OT_PUBLIC_INCLUDES})

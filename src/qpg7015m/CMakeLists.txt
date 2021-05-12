@@ -45,7 +45,7 @@ endif()
 
 add_library(openthread-qpg7015m
     alarm.c
-    diag.c     
+    diag.c
     entropy.c
     flash.c
     logging.c
@@ -64,9 +64,11 @@ set_target_properties(
 
 target_link_libraries(openthread-qpg7015m
     PRIVATE
+        -Wl,--start-group
         qpg7015m-driver
         ${OT_MBEDTLS}
         ot-config
+        -Wl,--end-group
     PUBLIC
         -lrt
         -pthread
@@ -87,14 +89,7 @@ target_compile_options(openthread-qpg7015m
 target_include_directories(openthread-qpg7015m
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
-        ${PROJECT_SOURCE_DIR}/src/core
-        ${PROJECT_SOURCE_DIR}/examples/platforms
-)
-
-target_include_directories(openthread-qpg7015m
-    PRIVATE
-        ${OT_PUBLIC_INCLUDES}
-        ${PROJECT_SOURCE_DIR}/openthread/examples/platforms
+        ${OPENTHREAD_DIR}/examples/platforms
 )
 
 target_include_directories(ot-config INTERFACE ${OT_PUBLIC_INCLUDES})

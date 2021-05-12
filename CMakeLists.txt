@@ -46,7 +46,20 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-add_subdirectory(openthread)
+if (DEFINED ENV{QORVO_OPENTHREAD_DIR})
+    set(OPENTHREAD_DIR $ENV{QORVO_OPENTHREAD_DIR})
+    add_subdirectory($ENV{QORVO_OPENTHREAD_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+else()
+    set(OPENTHREAD_DIR ${PROJECT_SOURCE_DIR}/openthread)
+    add_subdirectory(openthread)
+endif()
+message(STATUS "openthread @ ${OPENTHREAD_DIR}")
+
+if (DEFINED ENV{QORVO_OT_SDK})
+    SET(SDK_DIR "$ENV{QORVO_OT_SDK}/repo")
+else()
+    SET(SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Qorvo/repo")
+endif()
 
 target_compile_definitions(ot-config INTERFACE
     OPENTHREAD_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
@@ -59,4 +72,4 @@ target_include_directories(ot-config INTERFACE
 )
 
 add_subdirectory(src/${QORVO_PLATFORM})
-add_subdirectory(third_party)
+add_subdirectory(third_party/Qorvo)
