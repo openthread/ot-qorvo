@@ -69,12 +69,14 @@ if (QORVO_PLATFORM MATCHES "qpg6100")
             INTERFACE
                 ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_mtd.a
                 ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
+                mbedcrypto
         )
     else()
         target_link_libraries(qpg6100-driver
             INTERFACE
                 ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_ftd.a
                 ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
+                mbedcrypto
         )
     endif()
 endif()
