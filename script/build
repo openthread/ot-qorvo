@@ -36,6 +36,15 @@ readonly QORVO_PLATFORMS=(gp712 qpg6095 qpg6100 qpg7015m)
 readonly OT_SRCDIR="$(pwd)"
 readonly OT_OPTIONS=(
     "-DCMAKE_BUILD_TYPE=MinSizeRel"
+    "-DOT_IP6_FRAGM=ON"
+    "-DOT_JOINER=ON"
+    "-DOT_LINK_RAW=ON"
+    "-DOT_PLATFORM=external"
+    "-DOT_REFERENCE_DEVICE=ON"
+    "-DOT_THREAD_VERSION=1.1"
+)
+
+readonly OT_OPTIONS_HOST=(
     "-DOT_BORDER_AGENT=ON"
     "-DOT_BORDER_ROUTER=ON"
     "-DOT_COAP=ON"
@@ -44,21 +53,14 @@ readonly OT_OPTIONS=(
     "-DOT_DIAGNOSTIC=ON"
     "-DOT_DNS_CLIENT=ON"
     "-DOT_ECDSA=ON"
-    "-DOT_IP6_FRAGM=ON"
-    "-DOT_IP6_FRAGM=ON"
-    "-DOT_JOINER=ON"
-    "-DOT_LINK_RAW=ON"
     "-DOT_LOG_LEVEL_DYNAMIC=ON"
     "-DOT_MAC_FILTER=ON"
     "-DOT_MTD_NETDIAG=ON"
-    "-DOT_PLATFORM=external"
-    "-DOT_REFERENCE_DEVICE=ON"
     "-DOT_SERVICE=ON"
     "-DOT_SLAAC=ON"
     "-DOT_SNTP_CLIENT=ON"
-    "-DOT_THREAD_VERSION=1.1"
-    "-DOT_UDP_FORWARD=ON"
 )
+
 
 die()
 {
@@ -99,6 +101,7 @@ main()
 
     case "${platform}" in
         gp712 | qpg7015m)
+            options+=("${OT_OPTIONS_HOST[@]}")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
             ;;
         qpg6095 | qpg6100)
