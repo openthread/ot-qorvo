@@ -61,8 +61,6 @@ readonly OT_OPTIONS_HOST=(
     "-DOT_SERVICE=ON"
     "-DOT_SNTP_CLIENT=ON"
 )
-
-
 die()
 {
     echo " ** ERROR: $1"
