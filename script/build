@@ -36,18 +36,20 @@ readonly QORVO_PLATFORMS=(gp712 qpg6095 qpg6100 qpg7015m)
 readonly OT_SRCDIR="$(pwd)"
 readonly OT_OPTIONS=(
     "-DCMAKE_BUILD_TYPE=MinSizeRel"
+    "-DOT_COAP=ON"
+    "-DOT_COMMISSIONER=ON"
     "-DOT_IP6_FRAGM=ON"
     "-DOT_JOINER=ON"
     "-DOT_LINK_RAW=ON"
     "-DOT_PLATFORM=external"
     "-DOT_REFERENCE_DEVICE=ON"
+    "-DOT_SLAAC=ON"
     "-DOT_THREAD_VERSION=1.1"
 )
 
 readonly OT_OPTIONS_HOST=(
     "-DOT_BORDER_AGENT=ON"
     "-DOT_BORDER_ROUTER=ON"
-    "-DOT_COAP=ON"
     "-DOT_COAPS=ON"
     "-DOT_COMMISSIONER=ON"
     "-DOT_DIAGNOSTIC=ON"
@@ -57,7 +59,6 @@ readonly OT_OPTIONS_HOST=(
     "-DOT_MAC_FILTER=ON"
     "-DOT_MTD_NETDIAG=ON"
     "-DOT_SERVICE=ON"
-    "-DOT_SLAAC=ON"
     "-DOT_SNTP_CLIENT=ON"
 )
 
