@@ -92,10 +92,12 @@ main()
 
     case "${platform}" in
         qpg6095 | qpg6100)
-            find "./${builddir}/bin" -type f -executable -not -name '*.*' -not -name "${platform}-*" -execdir arm-none-eabi-objcopy -O ihex {} {}.hex \;
+            find "${builddir}/bin" -type f -executable -not -name '*.*' -not -name "${platform}-*" \
+                -execdir sh -c 'x="$1"; arm-none-eabi-objcopy -O ihex "$1" "$2-$(basename ${x}).hex"' _ {} "${platform}" \;
             ;;
     esac
-    find "./${builddir}/bin" -type f -not -name "${platform}-*" -execdir sh -c 'x="$1"; mv "$x" "$2-$(basename ${x})"' _ {} "${platform}" \;
+    find "${builddir}/bin" -type f -executable -not -name '*.*' -not -name "${platform}-*" \
+        -execdir sh -c 'x="$1"; mv "$x" "$2-$(basename ${x}).elf"' _ {} "${platform}" \;
 }
 
 main "$@"
