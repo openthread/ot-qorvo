@@ -26,73 +26,29 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-message(STATUS "Qorvo ${QORVO_PLATFORM} libs in ${SDK_DIR}")
+message(STATUS "Qorvo ${QORVO_PLATFORM} libs in ${SDK_DIR}/${QORVO_PLATFORM}")
+string(TOUPPER ${QORVO_PLATFORM} QORVO_PLATFORM_UPPER)
 
-if (QORVO_PLATFORM MATCHES "gp712")
-    add_library(gp712-driver INTERFACE)
+# setting defaults for the variables
+set(MBEDTLSALT "")
+set(MBEDCRYPTO "")
 
-    if (OT_MTD)
-        target_link_libraries(gp712-driver
-            INTERFACE
-                ${SDK_DIR}/gp712/lib/libQorvoGP712_mtd.a
-        )
-    else()
-        target_link_libraries(gp712-driver
-            INTERFACE
-                ${SDK_DIR}/gp712/lib/libQorvoGP712_ftd.a
-        )
-    endif()
+if (OT_MTD)
+    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
+else()
+    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
 endif()
 
-if (QORVO_PLATFORM MATCHES "qpg6095")
-    add_library(qpg6095-driver INTERFACE)
-
-    if (OT_MTD)
-        target_link_libraries(qpg6095-driver
-            INTERFACE
-                ${SDK_DIR}/qpg6095/lib/libQorvoQPG6095_mtd.a
-        )
-    else()
-        target_link_libraries(qpg6095-driver
-            INTERFACE
-                ${SDK_DIR}/qpg6095/lib/libQorvoQPG6095_ftd.a
-        )
-    endif()
-endif()
-
+# QPG6100 uses mbedtls_alt
 if (QORVO_PLATFORM MATCHES "qpg6100")
-    add_library(qpg6100-driver INTERFACE)
-    set(MBEDTLSALT "${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a")
-
-    if (OT_MTD)
-        target_link_libraries(qpg6100-driver
-            INTERFACE
-                ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_mtd.a
-                ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
-                mbedcrypto
-        )
-    else()
-        target_link_libraries(qpg6100-driver
-            INTERFACE
-                ${SDK_DIR}/qpg6100/lib/libQorvoQPG6100_ftd.a
-                ${SDK_DIR}/qpg6100/lib/libmbedtls_alt.a
-                mbedcrypto
-        )
-    endif()
+    set(MBEDTLSALT "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
+    set(MBEDCRYPTO "mbedcrypto")
 endif()
 
-if (QORVO_PLATFORM MATCHES "qpg7015m")
-    add_library(qpg7015m-driver INTERFACE)
-
-    if (OT_MTD)
-        target_link_libraries(qpg7015m-driver
-            INTERFACE
-                ${SDK_DIR}/qpg7015m/lib/libQorvoQPG7015M_mtd.a
-        )
-    else()
-        target_link_libraries(qpg7015m-driver
-            INTERFACE
-                ${SDK_DIR}/qpg7015m/lib/libQorvoQPG7015M_ftd.a
-        )
-    endif()
-endif()
+add_library(${QORVO_PLATFORM}-driver INTERFACE)
+target_link_libraries(${QORVO_PLATFORM}-driver
+    INTERFACE
+        ${QORVO_PLATFORM_LIB}
+        ${MBEDTLSALT}
+        ${MBEDCRYPTO}
+)
