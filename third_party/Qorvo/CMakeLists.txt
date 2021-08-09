@@ -33,17 +33,26 @@ string(TOUPPER ${QORVO_PLATFORM} QORVO_PLATFORM_UPPER)
 set(MBEDTLSALT "")
 set(MBEDCRYPTO "")
 
-if (OT_MTD)
-    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
-else()
+if (QORVO_PLATFORM MATCHES "qpg7015m|gp712")
     set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
 endif()
 
 # QPG6100 uses mbedtls_alt
-if (QORVO_PLATFORM MATCHES "qpg6100")
+if (QORVO_PLATFORM MATCHES "qpg6100|qpg6095")
+    # Since we need specific library for MTD, target flags should be MTD or FTD, not both.
+    if((OT_MTD) AND (OT_FTD))
+        message(FATAL_ERROR "Building ${QORVO_PLATFORM} with both OT_MTD and OT_FTD flags set is not supported")
+    endif()
+    if (OT_MTD)
+        set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
+    else()
+        set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
+    endif()
     set(MBEDTLSALT "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
     set(MBEDCRYPTO "mbedcrypto")
 endif()
+
+message( STATUS "Building platform ${QORVO_PLATFORM} with ${QORVO_PLATFORM_LIB}" )
 
 add_library(${QORVO_PLATFORM}-driver INTERFACE)
 target_link_libraries(${QORVO_PLATFORM}-driver

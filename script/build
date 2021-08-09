@@ -37,6 +37,7 @@ readonly OT_SRCDIR="$(pwd)"
 readonly OT_OPTIONS=(
     "-DCMAKE_BUILD_TYPE=MinSizeRel"
     "-DOT_PLATFORM=external"
+    "-DOT_SLAAC=ON"
 )
 
 die()
@@ -79,10 +80,12 @@ main()
     case "${platform}" in
         gp712 | qpg7015m)
             OT_CMAKE_NINJA_TARGET=("ot-rcp" "ot-cli-ftd")
+            options+=("-DOT_MTD=OFF")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
             ;;
         qpg6095 | qpg6100)
-            OT_CMAKE_NINJA_TARGET=("ot-cli-mtd" "ot-cli-ftd")
+            OT_CMAKE_NINJA_TARGET=("ot-cli-ftd")
+            options+=("-DOT_MTD=OFF")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-none-eabi.cmake")
             ;;
     esac
