@@ -35,7 +35,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <syslog.h>
 
 #include <openthread/platform/logging.h>
 #include <openthread/platform/toolchain.h>
@@ -46,39 +45,6 @@
 // Macro to append content to end of the log string.
 
 #if (OPENTHREAD_CONFIG_LOG_OUTPUT == OPENTHREAD_CONFIG_LOG_OUTPUT_PLATFORM_DEFINED)
-
-int PlatOtLogLevelToSysLogLevel(otLogLevel aLogLevel)
-{
-    int sysloglevel;
-
-    switch (aLogLevel)
-    {
-    case OT_LOG_LEVEL_NONE:
-        sysloglevel = LOG_ERR;
-        break;
-
-    case OT_LOG_LEVEL_CRIT:
-        sysloglevel = LOG_CRIT;
-        break;
-
-    case OT_LOG_LEVEL_WARN:
-        sysloglevel = LOG_WARNING;
-        break;
-
-    case OT_LOG_LEVEL_INFO:
-        sysloglevel = LOG_INFO;
-        break;
-
-    case OT_LOG_LEVEL_DEBG:
-        sysloglevel = LOG_DEBUG;
-        break;
-
-    default:
-        sysloglevel = LOG_ERR;
-    }
-
-    return sysloglevel;
-}
 
 OT_TOOL_WEAK void otPlatLog(otLogLevel aLogLevel, otLogRegion aLogRegion, const char *aFormat, ...)
 {
