@@ -52,6 +52,11 @@ else()
     SET(SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Qorvo/repo")
 endif()
 
+option(OT_MBEDTLS_DEBUG "Enable MbedTls debug mode" OFF)
+if (OT_MBEDTLS_DEBUG)
+    add_definitions(-DQORVO_MBEDTLS_DEBUG)
+endif()
+
 if (DEFINED ENV{QORVO_OPENTHREAD_DIR})
     set(OPENTHREAD_DIR $ENV{QORVO_OPENTHREAD_DIR})
     add_subdirectory(${OPENTHREAD_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

@@ -26,8 +26,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef QGP6095_MBEDTLS_CONFIG_H
-#define QGP6095_MBEDTLS_CONFIG_H
+#ifndef QPG6095_MBEDTLS_CONFIG_H
+#define QPG6095_MBEDTLS_CONFIG_H
 /* enable this to speed up crypto calculations by using a ram patch for bignum.c */
 #define MBEDTLS_BIGNUM_RAMPATCH 0
 
@@ -35,6 +35,16 @@
 #define MBEDTLS_SLOW_CPU 1
 #define MBEDTLS_COMPUTATION_UNTILL_SEQ_NR 6
 
+#if defined(QORVO_MBEDTLS_DEBUG)
+#ifndef MBEDTLS_DEBUG_C
+#define MBEDTLS_DEBUG_C
+#endif // MBEDTLS_DEBUG_C
+#else
+#ifdef MBEDTLS_DEBUG_C
+#undef MBEDTLS_DEBUG_C
+#endif // MBEDTLS_DEBUG_C
+#endif // QORVO_MBEDTLS_DEBUG
+
 #include "mbedtls/check_config.h"
 
-#endif // QGP6095_MBEDTLS_CONFIG_H
+#endif // QPG6095_MBEDTLS_CONFIG_H

@@ -26,18 +26,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef QPG6100_MBEDTLS_CONFIG_H
-#define QPG6100_MBEDTLS_CONFIG_H
-
-// Use Qorvo HW crypto support
-#undef MBEDTLS_ECP_WINDOW_SIZE
-#undef MBEDTLS_ECP_FIXED_POINT_OPTIM
-
-#define MBEDTLS_AES_ALT
-#define MBEDTLS_CCM_ALT
-#define MBEDTLS_ECP_ALT
-#define MBEDTLS_ECJPAKE_ALT
-#define MBEDTLS_SHA256_ALT
+#ifndef GP712_MBEDTLS_CONFIG_H
+#define GP712_MBEDTLS_CONFIG_H
 
 #if defined(QORVO_MBEDTLS_DEBUG)
 #ifndef MBEDTLS_DEBUG_C
@@ -51,4 +41,4 @@
 
 #include "mbedtls/check_config.h"
 
-#endif // QPG6100_MBEDTLS_CONFIG_H
+#endif // GP712_MBEDTLS_CONFIG_H
