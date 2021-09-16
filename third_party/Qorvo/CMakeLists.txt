@@ -33,17 +33,11 @@ string(TOUPPER ${QORVO_PLATFORM} QORVO_PLATFORM_UPPER)
 set(MBEDTLSALT "")
 set(MBEDCRYPTO "")
 
-if((OT_MTD) AND (OT_FTD))
-    message(FATAL_ERROR "Building ${QORVO_PLATFORM} with both OT_MTD and OT_FTD flags set is not supported")
+if(OT_FTD)
+    set(QORVO_PLATFORM_LIB_FTD "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
 endif()
 if (OT_MTD)
-    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
-elseif (OT_FTD)
-    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
-elseif (OT_RCP)
-    set(QORVO_PLATFORM_LIB "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_rcp.a")
-else()
-    message(FATAL_ERROR "Unsupported library")
+    set(QORVO_PLATFORM_LIB_MTD "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
 endif()
 
 # QPG6100 uses mbedtls_alt
@@ -52,12 +46,21 @@ if (QORVO_PLATFORM MATCHES "qpg6100")
     set(MBEDCRYPTO "mbedcrypto")
 endif()
 
-message( STATUS "Building platform ${QORVO_PLATFORM} with ${QORVO_PLATFORM_LIB}" )
+message( STATUS "Building platform ${QORVO_PLATFORM}" )
 
-add_library(${QORVO_PLATFORM}-driver INTERFACE)
-target_link_libraries(${QORVO_PLATFORM}-driver
+add_library(${QORVO_PLATFORM}-driver-ftd INTERFACE)
+target_link_libraries(${QORVO_PLATFORM}-driver-ftd
     INTERFACE
-        ${QORVO_PLATFORM_LIB}
+        ${QORVO_PLATFORM_LIB_FTD}
         ${MBEDTLSALT}
         ${MBEDCRYPTO}
 )
+
+add_library(${QORVO_PLATFORM}-driver-mtd INTERFACE)
+target_link_libraries(${QORVO_PLATFORM}-driver-mtd
+    INTERFACE
+        ${QORVO_PLATFORM_LIB_MTD}
+        ${MBEDTLSALT}
+        ${MBEDCRYPTO}
+)
+

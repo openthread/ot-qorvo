@@ -72,22 +72,22 @@ else()
     )
 endif()
 
-add_library(openthread-qpg7015m
+add_library(openthread-qpg7015m-ftd
     STATIC
     ${PLATFORM_SOURCES}
 )
 
 set_target_properties(
-    openthread-qpg7015m
+    openthread-qpg7015m-ftd
     PROPERTIES
         C_STANDARD 99
         CXX_STANDARD 11
 )
 
-target_link_libraries(openthread-qpg7015m
+target_link_libraries(openthread-qpg7015m-ftd
     PRIVATE
         -Wl,--start-group
-        qpg7015m-driver
+        qpg7015m-driver-ftd
         ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
@@ -98,17 +98,59 @@ target_link_libraries(openthread-qpg7015m
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
 )
 
-target_compile_definitions(openthread-qpg7015m
+target_compile_definitions(openthread-qpg7015m-ftd
     PUBLIC
         ${OT_PLATFORM_DEFINES}
 )
 
-target_compile_options(openthread-qpg7015m
+target_compile_options(openthread-qpg7015m-ftd
     PRIVATE
         ${OT_CFLAGS}
 )
 
-target_include_directories(openthread-qpg7015m
+target_include_directories(openthread-qpg7015m-ftd
+    PRIVATE
+        ${OT_PUBLIC_INCLUDES}
+        ${OPENTHREAD_DIR}/examples/platforms
+)
+
+add_library(openthread-qpg7015m-mtd
+    STATIC
+    ${PLATFORM_SOURCES}
+)
+
+set_target_properties(
+    openthread-qpg7015m-mtd
+    PROPERTIES
+        C_STANDARD 99
+        CXX_STANDARD 11
+)
+
+target_link_libraries(openthread-qpg7015m-mtd
+    PRIVATE
+        -Wl,--start-group
+        qpg7015m-driver-mtd
+        ${OT_MBEDTLS}
+        ot-config
+        -Wl,--end-group
+    PUBLIC
+        -lrt
+        -pthread
+        -Wl,--gc-sections
+        -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
+)
+
+target_compile_definitions(openthread-qpg7015m-mtd
+    PUBLIC
+        ${OT_PLATFORM_DEFINES}
+)
+
+target_compile_options(openthread-qpg7015m-mtd
+    PRIVATE
+        ${OT_CFLAGS}
+)
+
+target_include_directories(openthread-qpg7015m-mtd
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
         ${OPENTHREAD_DIR}/examples/platforms

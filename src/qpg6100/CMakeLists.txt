@@ -43,7 +43,7 @@ if(OT_CFLAGS MATCHES "-Wno-c\\+\\+14-compat")
     string(REPLACE "-Wno-c++14-compat" "" OT_CFLAGS "${OT_CFLAGS}")
 endif()
 
-add_library(openthread-qpg6100
+add_library(openthread-qpg6100-ftd
     alarm.c
     diag.c
     entropy.c
@@ -56,16 +56,16 @@ add_library(openthread-qpg6100
 )
 
 set_target_properties(
-    openthread-qpg6100
+    openthread-qpg6100-ftd
     PROPERTIES
         C_STANDARD 99
         CXX_STANDARD 11
 )
 
-target_link_libraries(openthread-qpg6100
+target_link_libraries(openthread-qpg6100-ftd
     PRIVATE
         -Wl,--start-group
-        qpg6100-driver
+        qpg6100-driver-ftd
         ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
@@ -76,17 +76,67 @@ target_link_libraries(openthread-qpg6100
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map,--cref
 )
 
-target_compile_definitions(openthread-qpg6100
+target_compile_definitions(openthread-qpg6100-ftd
     PUBLIC
         ${OT_PLATFORM_DEFINES}
 )
 
-target_compile_options(openthread-qpg6100
+target_compile_options(openthread-qpg6100-ftd
     PRIVATE
         ${OT_CFLAGS}
 )
 
-target_include_directories(openthread-qpg6100
+target_include_directories(openthread-qpg6100-ftd
+    PRIVATE
+        ${OT_PUBLIC_INCLUDES}
+        ${OPENTHREAD_DIR}/examples/platforms
+)
+
+
+add_library(openthread-qpg6100-mtd
+    alarm.c
+    diag.c
+    entropy.c
+    logging.c
+    misc.c
+    platform.c
+    radio.c
+    settings.cpp
+    uart.c
+)
+
+set_target_properties(
+    openthread-qpg6100-mtd
+    PROPERTIES
+        C_STANDARD 99
+        CXX_STANDARD 11
+)
+
+target_link_libraries(openthread-qpg6100-mtd
+    PRIVATE
+        -Wl,--start-group
+        qpg6100-driver-mtd
+        ${OT_MBEDTLS}
+        ot-config
+        -Wl,--end-group
+    PUBLIC
+        -T${SDK_DIR}/qpg6100/ld/qpg6100.ld
+        -nostdlib
+        -Wl,--gc-sections
+        -Wl,-Map=$<TARGET_PROPERTY:NAME>.map,--cref
+)
+
+target_compile_definitions(openthread-qpg6100-mtd
+    PUBLIC
+        ${OT_PLATFORM_DEFINES}
+)
+
+target_compile_options(openthread-qpg6100-mtd
+    PRIVATE
+        ${OT_CFLAGS}
+)
+
+target_include_directories(openthread-qpg6100-mtd
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
         ${OPENTHREAD_DIR}/examples/platforms
