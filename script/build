@@ -76,6 +76,7 @@ main()
     shift
 
     local options=("${OT_OPTIONS[@]}")
+    local cmdline_options=("$@")
 
     case "${platform}" in
         gp712 | qpg7015m)
@@ -90,8 +91,7 @@ main()
             ;;
     esac
 
-    options+=("$@")
-    build -DQORVO_PLATFORM="${platform}" "${options[@]}"
+    build -DQORVO_PLATFORM="${platform}" "${options[@]}" "${cmdline_options[@]}"
 
     case "${platform}" in
         qpg6095 | qpg6100)
