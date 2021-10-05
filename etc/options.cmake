@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2020, The OpenThread Authors.
+#  Copyright (c) 2019, The OpenThread Authors.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -26,46 +26,11 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required(VERSION 3.10.2)
-project(ot-qorvo VERSION 0.1.0)
-
-set(QORVO_PLATFORM_VALUES
-    "gp712"
-    "qpg6095"
-    "qpg6100"
-    "qpg7015m"
-)
-set_property(CACHE QORVO_PLATFORM PROPERTY STRINGS ${QORVO_PLATFORM_VALUES})
-if(NOT QORVO_PLATFORM IN_LIST QORVO_PLATFORM_VALUES)
-    message(FATAL_ERROR "Please select a supported platform: ${QORVO_PLATFORM_VALUES}")
+# Additional debugging option
+option(OT_MBEDTLS_DEBUG "enable Mbedtls debugging" OFF)
+if (OT_MBEDTLS_DEBUG)
+    add_definitions(-DQORVO_MBEDTLS_DEBUG)
 endif()
 
-set(OT_PLATFORM_LIB "openthread-${QORVO_PLATFORM}")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-
-if (DEFINED ENV{QORVO_OT_SDK})
-    SET(SDK_DIR "$ENV{QORVO_OT_SDK}")
-else()
-    SET(SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Qorvo/repo")
-endif()
-
-include("${PROJECT_SOURCE_DIR}/etc/options.cmake")
-
-set(OPENTHREAD_DIR ${PROJECT_SOURCE_DIR}/openthread)
-add_subdirectory(${OPENTHREAD_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
-target_compile_definitions(ot-config INTERFACE
-    OPENTHREAD_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
-    OPENTHREAD_PROJECT_CORE_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
-    OPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE="openthread-core-${QORVO_PLATFORM}-config-check.h"
-)
-
-target_include_directories(ot-config INTERFACE
-    ${PROJECT_SOURCE_DIR}/src/${QORVO_PLATFORM}
-)
-
-add_subdirectory(src/${QORVO_PLATFORM})
-add_subdirectory(third_party/Qorvo)
+# Uart transport option
+option(OT_QORVO_SOCKET "enable socket interface for uart transport on RPi based platforms" OFF)

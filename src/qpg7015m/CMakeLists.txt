@@ -51,7 +51,7 @@ if(OT_CFLAGS MATCHES "-Wno-c\\+\\+14-compat")
     string(REPLACE "-Wno-c++14-compat" "" OT_CFLAGS "${OT_CFLAGS}")
 endif()
 
-add_library(openthread-qpg7015m
+set(PLATFORM_SOURCES
     alarm.c
     diag.c
     entropy.c
@@ -60,7 +60,21 @@ add_library(openthread-qpg7015m
     misc.c
     radio.c
     system.c
-    uart-posix.c
+)
+
+if(OT_QORVO_SOCKET)
+    list(APPEND PLATFORM_SOURCES
+        uart-socket.c
+    )
+else()
+    list(APPEND PLATFORM_SOURCES
+        uart-posix.c
+    )
+endif()
+
+add_library(openthread-qpg7015m
+    STATIC
+    ${PLATFORM_SOURCES}
 )
 
 set_target_properties(
