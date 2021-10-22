@@ -72,22 +72,22 @@ else()
     )
 endif()
 
-add_library(openthread-gp712
+add_library(openthread-gp712-ftd
     STATIC
     ${PLATFORM_SOURCES}
 )
 
 set_target_properties(
-    openthread-gp712
+    openthread-gp712-ftd
     PROPERTIES
         C_STANDARD 99
         CXX_STANDARD 11
 )
 
-target_link_libraries(openthread-gp712
+target_link_libraries(openthread-gp712-ftd
     PRIVATE
         -Wl,--start-group
-        gp712-driver
+        gp712-driver-ftd
         ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
@@ -98,17 +98,59 @@ target_link_libraries(openthread-gp712
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
 )
 
-target_compile_definitions(openthread-gp712
+target_compile_definitions(openthread-gp712-ftd
     PUBLIC
         ${OT_PLATFORM_DEFINES}
 )
 
-target_compile_options(openthread-gp712
+target_compile_options(openthread-gp712-ftd
     PRIVATE
         ${OT_CFLAGS}
 )
 
-target_include_directories(openthread-gp712
+target_include_directories(openthread-gp712-ftd
+    PRIVATE
+        ${OT_PUBLIC_INCLUDES}
+        ${OPENTHREAD_DIR}/examples/platforms
+)
+
+add_library(openthread-gp712-mtd
+    STATIC
+    ${PLATFORM_SOURCES}
+)
+
+set_target_properties(
+    openthread-gp712-mtd
+    PROPERTIES
+        C_STANDARD 99
+        CXX_STANDARD 11
+)
+
+target_link_libraries(openthread-gp712-mtd
+    PRIVATE
+        -Wl,--start-group
+        gp712-driver-mtd
+        ${OT_MBEDTLS}
+        ot-config
+        -Wl,--end-group
+    PUBLIC
+        -lrt
+        -pthread
+        -Wl,--gc-sections
+        -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
+)
+
+target_compile_definitions(openthread-gp712-mtd
+    PUBLIC
+        ${OT_PLATFORM_DEFINES}
+)
+
+target_compile_options(openthread-gp712-mtd
+    PRIVATE
+        ${OT_CFLAGS}
+)
+
+target_include_directories(openthread-gp712-mtd
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
         ${OPENTHREAD_DIR}/examples/platforms

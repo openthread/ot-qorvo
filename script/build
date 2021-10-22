@@ -80,13 +80,11 @@ main()
 
     case "${platform}" in
         gp712 | qpg7015m)
-            OT_CMAKE_NINJA_TARGET=("ot-rcp" "ot-cli-ftd")
-            options+=("-DOT_MTD=OFF")
+            OT_CMAKE_NINJA_TARGET=("ot-rcp" "ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
             ;;
         qpg6095 | qpg6100)
-            OT_CMAKE_NINJA_TARGET=("ot-cli-ftd")
-            options+=("-DOT_MTD=OFF")
+            OT_CMAKE_NINJA_TARGET=("ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-none-eabi.cmake")
             ;;
     esac
