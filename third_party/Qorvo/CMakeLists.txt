@@ -40,7 +40,7 @@ if (OT_MTD)
     set(QORVO_PLATFORM_LIB_MTD "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
 endif()
 
-# QPG6100 uses mbedtls_alt
+# QPG6100 and QPG6105 use mbedtls_alt
 if (QORVO_PLATFORM MATCHES "qpg6100" OR QORVO_PLATFORM MATCHES "qpg6105")
     set(MBEDTLSALT "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
     set(MBEDCRYPTO "mbedcrypto")
