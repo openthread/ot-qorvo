@@ -1,6 +1,5 @@
-#!/bin/bash
 #
-#  Copyright (c) 2021, The OpenThread Authors.
+#  Copyright (c) 2020, The OpenThread Authors.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -27,37 +26,17 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-set -euxo pipefail
+set(CMAKE_SYSTEM_NAME              Generic)
+set(CMAKE_SYSTEM_PROCESSOR         ARM)
 
-readonly QORVO_PLATFORMS=(gp712 qpg6095 qpg6100 qpg6105 qpg7015m)
+set(CMAKE_C_COMPILER               arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER             arm-none-eabi-g++)
+set(CMAKE_ASM_COMPILER             arm-none-eabi-as)
+set(CMAKE_RANLIB                   arm-none-eabi-ranlib)
 
-readonly OT_BUILDDIR="$(pwd)/build"
+set(COMMON_C_FLAGS                 "-mcpu=cortex-m4 -mthumb -fdata-sections -ffunction-sections")
 
-readonly OT_OPTIONS=(
-    "-DOT_COMPILE_WARNING_AS_ERROR=ON"
-)
-
-die()
-{
-    echo " ** ERROR: $1"
-    exit 1
-}
-
-main()
-{
-    if [[ $# == 0 ]]; then
-        echo "Please specify a platform: ${QORVO_PLATFORMS[*]}"
-        exit 1
-    fi
-
-    local platform="$1"
-    echo "${QORVO_PLATFORMS[@]}" | grep -wq "${platform}" || die "Unsupported platform ${platform}"
-    shift
-
-    export CPPFLAGS="${CPPFLAGS:-} -DNDEBUG"
-
-    rm -rf "$OT_BUILDDIR"
-    "$(dirname "$0")"/build "${platform}" "${OT_OPTIONS[@]}"
-}
-
-main "$@"
+set(CMAKE_C_FLAGS_INIT             "${COMMON_C_FLAGS} -std=gnu99")
+set(CMAKE_CXX_FLAGS_INIT           "${COMMON_C_FLAGS} -fno-exceptions -fno-rtti")
+set(CMAKE_ASM_FLAGS_INIT           "${COMMON_C_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS_INIT    "${COMMON_C_FLAGS} -specs=nano.specs -specs=nosys.specs")

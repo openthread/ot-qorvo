@@ -26,41 +26,71 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-message(STATUS "Qorvo ${QORVO_PLATFORM} libs in ${SDK_DIR}/${QORVO_PLATFORM}")
-string(TOUPPER ${QORVO_PLATFORM} QORVO_PLATFORM_UPPER)
-
-# setting defaults for the variables
-set(MBEDTLSALT "")
-set(MBEDCRYPTO "")
-
-if(OT_FTD)
-    set(QORVO_PLATFORM_LIB_FTD "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_ftd.a")
-endif()
-if (OT_MTD)
-    set(QORVO_PLATFORM_LIB_MTD "${SDK_DIR}/${QORVO_PLATFORM}/lib/libQorvo${QORVO_PLATFORM_UPPER}_mtd.a")
-endif()
-
-# QPG6100 uses mbedtls_alt
-if (QORVO_PLATFORM MATCHES "qpg6100" OR QORVO_PLATFORM MATCHES "qpg6105")
-    set(MBEDTLSALT "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
-    set(MBEDCRYPTO "mbedcrypto")
-endif()
-
-message( STATUS "Building platform ${QORVO_PLATFORM}" )
-
-add_library(${QORVO_PLATFORM}-driver-ftd INTERFACE)
-target_link_libraries(${QORVO_PLATFORM}-driver-ftd
-    INTERFACE
-        ${QORVO_PLATFORM_LIB_FTD}
-        ${MBEDTLSALT}
-        ${MBEDCRYPTO}
+target_compile_definitions(ot-config INTERFACE
+    "MBEDTLS_USER_CONFIG_FILE=\"qpg6105-mbedtls-config.h\""
 )
 
-add_library(${QORVO_PLATFORM}-driver-mtd INTERFACE)
-target_link_libraries(${QORVO_PLATFORM}-driver-mtd
-    INTERFACE
-        ${QORVO_PLATFORM_LIB_MTD}
-        ${MBEDTLSALT}
-        ${MBEDCRYPTO}
+list(APPEND OT_PUBLIC_INCLUDES
+    "${CMAKE_CURRENT_SOURCE_DIR}/crypto"
+)
+set(OT_PUBLIC_INCLUDES ${OT_PUBLIC_INCLUDES} PARENT_SCOPE)
+
+if(OT_CFLAGS MATCHES "-pedantic-errors")
+    string(REPLACE "-pedantic-errors" "" OT_CFLAGS "${OT_CFLAGS}")
+endif()
+
+if(OT_CFLAGS MATCHES "-Wno-c\\+\\+14-compat")
+    string(REPLACE "-Wno-c++14-compat" "" OT_CFLAGS "${OT_CFLAGS}")
+endif()
+
+add_library(openthread-qpg6105
+    alarm.c
+    diag.c
+    entropy.c
+    logging.c
+    misc.c
+    platform.c
+    radio.c
+    settings.cpp
+    uart.c
 )
 
+set_target_properties(
+    openthread-qpg6105
+    PROPERTIES
+        C_STANDARD 99
+        CXX_STANDARD 11
+)
+
+target_link_libraries(openthread-qpg6105
+    PRIVATE
+        -Wl,--start-group
+        qpg6105-driver
+        ${OT_MBEDTLS}
+        ot-config
+        -Wl,--end-group
+    PUBLIC
+        -T${SDK_DIR}/qpg6105/ld/qpg6105.ld
+        -nostdlib
+        -Wl,--gc-sections
+        -Wl,-Map=$<TARGET_PROPERTY:NAME>.map,--cref
+)
+
+target_compile_definitions(openthread-qpg6105
+    PUBLIC
+        ${OT_PLATFORM_DEFINES}
+)
+
+target_compile_options(openthread-qpg6105
+    PRIVATE
+        ${OT_CFLAGS}
+)
+
+target_include_directories(openthread-qpg6105
+    PRIVATE
+        ${OT_PUBLIC_INCLUDES}
+        ${OPENTHREAD_DIR}/examples/platforms
+)
+
+target_include_directories(ot-config INTERFACE ${OT_PUBLIC_INCLUDES})
+target_compile_definitions(ot-config INTERFACE ${OT_PLATFORM_DEFINES})

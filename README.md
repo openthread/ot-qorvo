@@ -7,11 +7,12 @@
 
 # OpenThread on Qorvo Example
 
-This repo contains example platform drivers for [Qorvo GP712][gp712], [Qorvo QPG6095][qpg6095], [Qorvo QPG6100][qpg6100], and [Qorvo QPG7015M][qpg7015m].
+This repo contains example platform drivers for [Qorvo GP712][gp712], [Qorvo QPG6095][qpg6095], [Qorvo QPG6100][qpg6100], [Qorvo QPG6105][qpg6105] and [Qorvo QPG7015M][qpg7015m].
 
 [gp712]: https://www.qorvo.com/products/p/GP712
 [qpg6095]: https://www.qorvo.com/products/p/QPG6095
 [qpg6100]: https://www.qorvo.com/products/p/QPG6100
+[qpg6105]: https://www.qorvo.com/products/p/QPG6105
 [qpg7015m]: https://www.qorvo.com/products/p/QPG7015M
 
 To learn more about building and running the examples please check the [documentation](https://github.com/Qorvo/qpg-openthread/blob/master/README.md)
