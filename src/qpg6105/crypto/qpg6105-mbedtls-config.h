@@ -26,8 +26,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef QGP6100_MBEDTLS_CONFIG_H
-#define QGP6100_MBEDTLS_CONFIG_H
+#ifndef QGP6105_MBEDTLS_CONFIG_H
+#define QGP6105_MBEDTLS_CONFIG_H
 
 // Use Qorvo HW crypto support
 #undef MBEDTLS_ECP_WINDOW_SIZE
@@ -41,4 +41,4 @@
 
 #include "mbedtls/check_config.h"
 
-#endif // QGP6100_MBEDTLS_CONFIG_H
+#endif // QGP6105_MBEDTLS_CONFIG_H
