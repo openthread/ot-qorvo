@@ -33,6 +33,7 @@ set(QORVO_PLATFORM_VALUES
     "gp712"
     "qpg6095"
     "qpg6100"
+    "qpg6105"
     "qpg7015m"
 )
 set_property(CACHE QORVO_PLATFORM PROPERTY STRINGS ${QORVO_PLATFORM_VALUES})

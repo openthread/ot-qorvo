@@ -31,7 +31,7 @@ set -euxo pipefail
 
 OT_CMAKE_NINJA_TARGET=${OT_CMAKE_NINJA_TARGET:-}
 
-readonly QORVO_PLATFORMS=(gp712 qpg6095 qpg6100 qpg7015m)
+readonly QORVO_PLATFORMS=(gp712 qpg6095 qpg6100 qpg6105 qpg7015m)
 
 readonly OT_SRCDIR="$(pwd)"
 readonly OT_OPTIONS=(
@@ -83,7 +83,7 @@ main()
             OT_CMAKE_NINJA_TARGET=("ot-rcp" "ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
             ;;
-        qpg6095 | qpg6100)
+        qpg6095 | qpg6100 | qpg6105)
             OT_CMAKE_NINJA_TARGET=("ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-none-eabi.cmake")
             ;;
@@ -92,7 +92,7 @@ main()
     build -DQORVO_PLATFORM="${platform}" "${options[@]}" "${cmdline_options[@]}"
 
     case "${platform}" in
-        qpg6095 | qpg6100)
+        qpg6095 | qpg6100 | qpg6105)
             find "${builddir}/bin" -type f -executable -not -name '*.*' -not -name "${platform}-*" \
                 -execdir sh -c 'x="$1"; arm-none-eabi-objcopy -O ihex "$1" "$2-$(basename ${x}).hex"' _ {} "${platform}" \;
             ;;
