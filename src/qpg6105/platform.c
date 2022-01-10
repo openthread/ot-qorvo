@@ -46,8 +46,6 @@
 
 static otInstance *localInstance = NULL;
 
-extern void flash_jump_gpJumpTables_GetRomVersion(void);
-
 uint8_t qorvoPlatGotoSleepCheck(void)
 {
     if (localInstance)
@@ -64,7 +62,6 @@ void otSysInit(int argc, char *argv[])
 {
     OT_UNUSED_VARIABLE(argc);
     OT_UNUSED_VARIABLE(argv);
-    flash_jump_gpJumpTables_GetRomVersion();
     qorvoPlatInit((qorvoPlatGotoSleepCheckCallback_t)qorvoPlatGotoSleepCheck);
     qorvoUartInit();
     qorvoAlarmInit();
