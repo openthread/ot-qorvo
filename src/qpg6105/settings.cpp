@@ -49,9 +49,11 @@
  *****************************************************************************/
 
 // settings API
-void otPlatSettingsInit(otInstance *aInstance)
+void otPlatSettingsInit(otInstance *aInstance, const uint16_t *aSensitiveKeys, uint16_t aSensitiveKeysLength)
 {
     OT_UNUSED_VARIABLE(aInstance);
+    OT_UNUSED_VARIABLE(aSensitiveKeys);
+    OT_UNUSED_VARIABLE(aSensitiveKeysLength);
     qorvoSettingsInit();
 }
 
@@ -123,7 +125,7 @@ otError otPlatSettingsDelete(otInstance *aInstance, uint16_t aKey, int aIndex)
 void otPlatSettingsWipe(otInstance *aInstance)
 {
     qorvoSettingsWipe();
-    otPlatSettingsInit(aInstance);
+    otPlatSettingsInit(aInstance, NULL, 0);
 }
 
 #endif /* OPENTHREAD_SETTINGS_RAM */
