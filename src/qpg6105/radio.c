@@ -43,9 +43,9 @@
 
 enum
 {
-    QPG_RECEIVE_SENSITIVITY = -100, // dBm
-    QPG_CSL_ACCURACY = 50, // ppm
-    QPG_CSL_CLOCK_UNCERTAINTY = 255, // us
+    QPG_RECEIVE_SENSITIVITY   = -100, // dBm
+    QPG_CSL_ACCURACY          = 50,   // ppm
+    QPG_CSL_CLOCK_UNCERTAINTY = 255,  // us
 };
 
 enum
@@ -119,7 +119,7 @@ void otPlatRadioSetPanId(otInstance *aInstance, otPanId aPanId)
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    qorvoRadioSetPanId((uint16_t) aPanId);
+    qorvoRadioSetPanId((uint16_t)aPanId);
     otCachedSettings.panid = aPanId;
 }
 
@@ -134,7 +134,7 @@ void otPlatRadioSetShortAddress(otInstance *aInstance, otShortAddress aShortAddr
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    qorvoRadioSetShortAddress((uint16_t) aShortAddress);
+    qorvoRadioSetShortAddress((uint16_t)aShortAddress);
 }
 
 otError otPlatRadioGetTransmitPower(otInstance *aInstance, int8_t *aPower)
@@ -246,7 +246,8 @@ void otPlatRadioSetMacKey(otInstance *            aInstance,
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    qorvoRadioSetMacKey(aKeyIdMode, aKeyId, aPrevKey->mKeyMaterial.mKey.m8, aCurrKey->mKeyMaterial.mKey.m8, aNextKey->mKeyMaterial.mKey.m8, aKeyType);
+    qorvoRadioSetMacKey(aKeyIdMode, aKeyId, aPrevKey->mKeyMaterial.mKey.m8, aCurrKey->mKeyMaterial.mKey.m8,
+                        aNextKey->mKeyMaterial.mKey.m8, aKeyType);
 }
 
 void otPlatRadioSetMacFrameCounter(otInstance *aInstance, uint32_t aMacFrameCounter)
@@ -395,7 +396,6 @@ void cbQorvoRadioTxStarted(otRadioFrame *aFrame)
     otPlatRadioTxStarted(pQorvoInstance, aFrame);
 }
 
-
 void cbQorvoRadioTransmitDone_AckFrame(otRadioFrame *aFrame, otRadioFrame *aAckFrame, otError aError)
 {
     otPlatRadioTxDone(pQorvoInstance, aFrame, aAckFrame, aError);
@@ -459,7 +459,7 @@ otError otPlatRadioAddSrcMatchShortEntry(otInstance *aInstance, otShortAddress a
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    return qorvoRadioAddSrcMatchShortEntry((uint16_t) aShortAddress, otCachedSettings.panid);
+    return qorvoRadioAddSrcMatchShortEntry((uint16_t)aShortAddress, otCachedSettings.panid);
 }
 
 otError otPlatRadioAddSrcMatchExtEntry(otInstance *aInstance, const otExtAddress *aExtAddress)
@@ -473,7 +473,7 @@ otError otPlatRadioClearSrcMatchShortEntry(otInstance *aInstance, otShortAddress
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    return qorvoRadioClearSrcMatchShortEntry((uint16_t) aShortAddress, otCachedSettings.panid);
+    return qorvoRadioClearSrcMatchShortEntry((uint16_t)aShortAddress, otCachedSettings.panid);
 }
 
 otError otPlatRadioClearSrcMatchExtEntry(otInstance *aInstance, const otExtAddress *aExtAddress)
@@ -542,7 +542,7 @@ otError otPlatRadioEnableCsl(otInstance *        aInstance,
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    return qorvoRadioEnableCsl(aCslPeriod, (uint16_t) aShortAddr, aExtAddr->m8);
+    return qorvoRadioEnableCsl(aCslPeriod, (uint16_t)aShortAddr, aExtAddr->m8);
 }
 
 void otPlatRadioUpdateCslSampleTime(otInstance *aInstance, uint32_t aCslSampleTime)
@@ -598,5 +598,5 @@ otError otPlatRadioConfigureEnhAckProbing(otInstance *        aInstance,
 {
     OT_UNUSED_VARIABLE(aInstance);
 
-    return qorvoRadioConfigureEnhAckProbing(aLinkMetrics, (uint16_t) aShortAddress, aExtAddress->m8);
+    return qorvoRadioConfigureEnhAckProbing(aLinkMetrics, (uint16_t)aShortAddress, aExtAddress->m8);
 }

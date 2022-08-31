@@ -36,8 +36,8 @@
 #include <stdint.h>
 
 #include "alarm_qorvo.h"
-#include <openthread/platform/alarm-milli.h>
 #include <openthread/platform/alarm-micro.h>
+#include <openthread/platform/alarm-milli.h>
 #include <openthread/platform/diag.h>
 
 uint32_t otPlatAlarmMilliGetNow(void)

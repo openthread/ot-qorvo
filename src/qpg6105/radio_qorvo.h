@@ -251,9 +251,7 @@ void qorvoRadioSetMacFrameCounter(uint32_t aMacFrameCounter);
  * @retval  kErrorNone           Successfully enabled or disabled CSL.
  *
  */
-otError qorvoRadioEnableCsl(uint32_t       aCslPeriod,
-                            uint16_t       aShortAddr,
-                            const uint8_t *aExtAddr);
+otError qorvoRadioEnableCsl(uint32_t aCslPeriod, uint16_t aShortAddr, const uint8_t *aExtAddr);
 
 /**
  * Update CSL sample time in radio driver.
