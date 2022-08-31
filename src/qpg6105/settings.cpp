@@ -113,11 +113,8 @@ otError otPlatSettingsDelete(otInstance *aInstance, uint16_t aKey, int aIndex)
     otError error = OT_ERROR_NOT_FOUND;
     OT_UNUSED_VARIABLE(aInstance);
 
-    if (otPlatSettingsGet(aInstance, aKey, 0, nullptr, nullptr) == OT_ERROR_NONE)
-    {
-        qorvoSettingsDelete(aKey, aIndex);
-        error = OT_ERROR_NONE;
-    }
+    /* Existence of @aKey is done in @qorvoSettingsDelete */
+    error = qorvoSettingsDelete(aKey, aIndex);
 
     return error;
 }
