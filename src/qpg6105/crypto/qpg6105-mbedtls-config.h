@@ -38,6 +38,8 @@
 #define MBEDTLS_ECP_ALT
 #define MBEDTLS_ECJPAKE_ALT
 #define MBEDTLS_SHA256_ALT
+#define MBEDTLS_ECDSA_VERIFY_ALT
+#define MBEDTLS_ECDSA_SIGN_ALT
 
 #include "mbedtls/check_config.h"
 
