@@ -102,7 +102,7 @@ jobs:
 
   gcc-arm-none-linux-gnueabihf:
     name: gcc-arm-none-linux-gnueabihf-${{ matrix.gcc_ver }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
@@ -120,9 +120,6 @@ jobs:
         sudo apt-get --no-install-recommends install -y lib32z1 ninja-build
         wget --tries 4 --no-check-certificate --quiet ${{ matrix.gcc_download_url }} -O gcc-arm.tar.xz
         tar xf gcc-arm.tar.xz
-        # use the minimal required cmake version
-        sudo pip3 install --system -U cmake==3.10.3
-        cmake --version | grep 3.10.3
     - name: Build
       run: |
         export PATH=/tmp/${{ matrix.gcc_extract_dir }}/bin:$PATH
