@@ -68,7 +68,7 @@ enum
 extern otRadioFrame sTransmitFrame;
 
 static otRadioState sState;
-static otInstance * pQorvoInstance;
+static otInstance  *pQorvoInstance;
 
 typedef struct otCachedSettings_s
 {

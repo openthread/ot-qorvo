@@ -49,7 +49,7 @@ otError otPlatEntropyGet(uint8_t *aOutput, uint16_t aOutputLength)
 {
     otError error = OT_ERROR_NONE;
 
-    FILE * file = NULL;
+    FILE  *file = NULL;
     size_t readLength;
 
     otEXPECT_ACTION(aOutput && aOutputLength, error = OT_ERROR_INVALID_ARGS);

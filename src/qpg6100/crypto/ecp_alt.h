@@ -82,7 +82,7 @@ typedef struct
     mbedtls_ecp_group_id grp_id;   /*!< Internal identifier        */
     uint16_t             tls_id;   /*!< TLS NamedCurve identifier  */
     uint16_t             bit_size; /*!< Curve size in bits         */
-    const char *         name;     /*!< Human-friendly name        */
+    const char          *name;     /*!< Human-friendly name        */
 } mbedtls_ecp_curve_info;
 
 /**
@@ -356,8 +356,8 @@ int mbedtls_ecp_point_read_string(mbedtls_ecp_point *P, int radix, const char *x
 int mbedtls_ecp_point_write_binary(const mbedtls_ecp_group *grp,
                                    const mbedtls_ecp_point *P,
                                    int                      format,
-                                   size_t *                 olen,
-                                   unsigned char *          buf,
+                                   size_t                  *olen,
+                                   unsigned char           *buf,
                                    size_t                   buflen);
 
 /**
@@ -379,8 +379,8 @@ int mbedtls_ecp_point_write_binary(const mbedtls_ecp_group *grp,
  *                  that.
  */
 int mbedtls_ecp_point_read_binary(const mbedtls_ecp_group *grp,
-                                  mbedtls_ecp_point *      P,
-                                  const unsigned char *    buf,
+                                  mbedtls_ecp_point       *P,
+                                  const unsigned char     *buf,
                                   size_t                   ilen);
 
 /**
@@ -398,8 +398,8 @@ int mbedtls_ecp_point_read_binary(const mbedtls_ecp_group *grp,
  *                  MBEDTLS_ERR_ECP_BAD_INPUT_DATA if input is invalid
  */
 int mbedtls_ecp_tls_read_point(const mbedtls_ecp_group *grp,
-                               mbedtls_ecp_point *      pt,
-                               const unsigned char **   buf,
+                               mbedtls_ecp_point       *pt,
+                               const unsigned char    **buf,
                                size_t                   len);
 
 /**
@@ -419,8 +419,8 @@ int mbedtls_ecp_tls_read_point(const mbedtls_ecp_group *grp,
 int mbedtls_ecp_tls_write_point(const mbedtls_ecp_group *grp,
                                 const mbedtls_ecp_point *pt,
                                 int                      format,
-                                size_t *                 olen,
-                                unsigned char *          buf,
+                                size_t                  *olen,
+                                unsigned char           *buf,
                                 size_t                   blen);
 
 /**
@@ -492,9 +492,9 @@ int mbedtls_ecp_tls_write_group(const mbedtls_ecp_group *grp, size_t *olen, unsi
  *                  or P is not a valid pubkey,
  *                  MBEDTLS_ERR_MPI_ALLOC_FAILED if memory allocation failed
  */
-int mbedtls_ecp_mul(mbedtls_ecp_group *      grp,
-                    mbedtls_ecp_point *      R,
-                    const mbedtls_mpi *      m,
+int mbedtls_ecp_mul(mbedtls_ecp_group       *grp,
+                    mbedtls_ecp_point       *R,
+                    const mbedtls_mpi       *m,
                     const mbedtls_ecp_point *P,
                     int (*f_rng)(void *, unsigned char *, size_t),
                     void *p_rng);
@@ -519,11 +519,11 @@ int mbedtls_ecp_mul(mbedtls_ecp_group *      grp,
  *                  or P or Q is not a valid pubkey,
  *                  MBEDTLS_ERR_MPI_ALLOC_FAILED if memory allocation failed
  */
-int mbedtls_ecp_muladd(mbedtls_ecp_group *      grp,
-                       mbedtls_ecp_point *      R,
-                       const mbedtls_mpi *      m,
+int mbedtls_ecp_muladd(mbedtls_ecp_group       *grp,
+                       mbedtls_ecp_point       *R,
+                       const mbedtls_mpi       *m,
                        const mbedtls_ecp_point *P,
-                       const mbedtls_mpi *      n,
+                       const mbedtls_mpi       *n,
                        const mbedtls_ecp_point *Q);
 
 /**
@@ -581,10 +581,10 @@ int mbedtls_ecp_check_privkey(const mbedtls_ecp_group *grp, const mbedtls_mpi *d
  *                  in order to ease use with other structures such as
  *                  mbedtls_ecdh_context of mbedtls_ecdsa_context.
  */
-int mbedtls_ecp_gen_keypair_base(mbedtls_ecp_group *      grp,
+int mbedtls_ecp_gen_keypair_base(mbedtls_ecp_group       *grp,
                                  const mbedtls_ecp_point *G,
-                                 mbedtls_mpi *            d,
-                                 mbedtls_ecp_point *      Q,
+                                 mbedtls_mpi             *d,
+                                 mbedtls_ecp_point       *Q,
                                  int (*f_rng)(void *, unsigned char *, size_t),
                                  void *p_rng);
 
@@ -605,7 +605,7 @@ int mbedtls_ecp_gen_keypair_base(mbedtls_ecp_group *      grp,
  *                  mbedtls_ecdh_context of mbedtls_ecdsa_context.
  */
 int mbedtls_ecp_gen_keypair(mbedtls_ecp_group *grp,
-                            mbedtls_mpi *      d,
+                            mbedtls_mpi       *d,
                             mbedtls_ecp_point *Q,
                             int (*f_rng)(void *, unsigned char *, size_t),
                             void *p_rng);
