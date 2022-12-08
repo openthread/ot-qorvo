@@ -150,7 +150,7 @@ MBEDTLS_DEPRECATED static inline void mbedtls_sha256_starts(mbedtls_sha256_conte
  * \param ilen     The length of the input data.
  */
 MBEDTLS_DEPRECATED static inline void mbedtls_sha256_update(mbedtls_sha256_context *ctx,
-                                                            const unsigned char *   input,
+                                                            const unsigned char    *input,
                                                             size_t                  ilen)
 {
     mbedtls_sha256_update_ret(ctx, input, ilen);

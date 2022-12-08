@@ -84,7 +84,7 @@ otError otPlatSettingsGet(otInstance *aInstance, uint16_t aKey, int aIndex, uint
     return error;
 }
 
-static otError PlatformSettingsAdd(otInstance *   aInstance,
+static otError PlatformSettingsAdd(otInstance    *aInstance,
                                    uint16_t       aKey,
                                    bool           aIndex0,
                                    const uint8_t *aValue,

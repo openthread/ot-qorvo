@@ -112,7 +112,7 @@ int mbedtls_ecjpake_setup(mbedtls_ecjpake_context *ctx,
                           mbedtls_ecjpake_role     role,
                           mbedtls_md_type_t        hash,
                           mbedtls_ecp_group_id     curve,
-                          const unsigned char *    secret,
+                          const unsigned char     *secret,
                           size_t                   len);
 
 /**
@@ -141,9 +141,9 @@ int mbedtls_ecjpake_check(const mbedtls_ecjpake_context *ctx);
  *                  a negative error code otherwise
  */
 int mbedtls_ecjpake_write_round_one(mbedtls_ecjpake_context *ctx,
-                                    unsigned char *          buf,
+                                    unsigned char           *buf,
                                     size_t                   len,
-                                    size_t *                 olen,
+                                    size_t                  *olen,
                                     int (*f_rng)(void *, unsigned char *, size_t),
                                     void *p_rng);
 
@@ -176,9 +176,9 @@ int mbedtls_ecjpake_read_round_one(mbedtls_ecjpake_context *ctx, const unsigned 
  *                  a negative error code otherwise
  */
 int mbedtls_ecjpake_write_round_two(mbedtls_ecjpake_context *ctx,
-                                    unsigned char *          buf,
+                                    unsigned char           *buf,
                                     size_t                   len,
-                                    size_t *                 olen,
+                                    size_t                  *olen,
                                     int (*f_rng)(void *, unsigned char *, size_t),
                                     void *p_rng);
 
@@ -210,9 +210,9 @@ int mbedtls_ecjpake_read_round_two(mbedtls_ecjpake_context *ctx, const unsigned 
  *                  a negative error code otherwise
  */
 int mbedtls_ecjpake_derive_secret(mbedtls_ecjpake_context *ctx,
-                                  unsigned char *          buf,
+                                  unsigned char           *buf,
                                   size_t                   len,
-                                  size_t *                 olen,
+                                  size_t                  *olen,
                                   int (*f_rng)(void *, unsigned char *, size_t),
                                   void *p_rng);
 

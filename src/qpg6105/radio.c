@@ -70,7 +70,7 @@ enum
 extern otRadioFrame sTransmitFrame;
 
 static otRadioState sState;
-static otInstance * pQorvoInstance;
+static otInstance  *pQorvoInstance;
 
 typedef struct otCachedSettings_s
 {
@@ -236,7 +236,7 @@ void otPlatRadioSetPromiscuous(otInstance *aInstance, bool aEnable)
     qorvoRadioSetPromiscuous(aEnable);
 }
 
-void otPlatRadioSetMacKey(otInstance *            aInstance,
+void otPlatRadioSetMacKey(otInstance             *aInstance,
                           uint8_t                 aKeyIdMode,
                           uint8_t                 aKeyId,
                           const otMacKeyMaterial *aPrevKey,
@@ -535,7 +535,7 @@ otError otPlatRadioGetCoexMetrics(otInstance *aInstance, otRadioCoexMetrics *aCo
     return OT_ERROR_NOT_IMPLEMENTED;
 }
 
-otError otPlatRadioEnableCsl(otInstance *        aInstance,
+otError otPlatRadioEnableCsl(otInstance         *aInstance,
                              uint32_t            aCslPeriod,
                              otShortAddress      aShortAddr,
                              const otExtAddress *aExtAddr)
@@ -591,7 +591,7 @@ otError otPlatRadioGetRegion(otInstance *aInstance, uint16_t *aRegionCode)
     return OT_ERROR_NOT_IMPLEMENTED;
 }
 
-otError otPlatRadioConfigureEnhAckProbing(otInstance *        aInstance,
+otError otPlatRadioConfigureEnhAckProbing(otInstance         *aInstance,
                                           otLinkMetrics       aLinkMetrics,
                                           otShortAddress      aShortAddress,
                                           const otExtAddress *aExtAddress)
