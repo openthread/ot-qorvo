@@ -59,7 +59,7 @@ otError otPlatUartDisable(void)
 
 otError otPlatUartFlush(void)
 {
-    return OT_ERROR_NOT_IMPLEMENTED;
+    return qorvoUartFlush();
 }
 
 otError otPlatUartSend(const uint8_t *aBuf, uint16_t aBufLength)

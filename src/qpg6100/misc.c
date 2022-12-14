@@ -43,6 +43,11 @@ otPlatResetReason otPlatGetResetReason(otInstance *aInstance)
     return OT_PLAT_RESET_REASON_POWER_ON;
 }
 
+void otPlatAssertFail(const char *aFilename, int aLineNumber)
+{
+    qorvoPlatAssertFail(aFilename, aLineNumber);
+}
+
 void otPlatWakeHost(void)
 {
     // TODO: implement an operation to wake the host from sleep state.

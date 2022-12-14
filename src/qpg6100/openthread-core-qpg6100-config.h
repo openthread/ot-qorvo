@@ -35,19 +35,31 @@
 #define OPENTHREAD_CORE_QPG6100_CONFIG_H_
 
 /**
- * @def OPENTHREAD_CONFIG_LEGACY_TRANSMIT_DONE
- *
- * Define to 1 if you want use legacy transmit done.
- *
- */
-#define OPENTHREAD_CONFIG_LEGACY_TRANSMIT_DONE 1
-
-/**
  * @def OPENTHREAD_CONFIG_PLATFORM_INFO
  *
  * The platform-specific string to insert into the OpenThread version string.
  *
  */
 #define OPENTHREAD_CONFIG_PLATFORM_INFO "QPG6100"
+
+/**
+ * @def OPENTHREAD_CONFIG_PLATFORM_ASSERT_MANAGEMENT
+ *
+ * The assert is managed by platform defined logic when this flag is set.
+ *
+ */
+#ifndef OPENTHREAD_CONFIG_PLATFORM_ASSERT_MANAGEMENT
+#define OPENTHREAD_CONFIG_PLATFORM_ASSERT_MANAGEMENT 1
+#endif
+
+/**
+ * @def OPENTHREAD_CONFIG_DIAG_ENABLE
+ *
+ * Define as 1 to enable the diag feature.
+ *
+ */
+#ifndef OPENTHREAD_CONFIG_DIAG_ENABLE
+#define OPENTHREAD_CONFIG_DIAG_ENABLE 1
+#endif
 
 #endif // OPENTHREAD_CORE_QPG6100_CONFIG_H_

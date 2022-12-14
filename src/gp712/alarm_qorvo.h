@@ -49,26 +49,20 @@ typedef void (*qorvoAlarmCallback_t)(void *);
 void qorvoAlarmInit(void);
 
 /**
- * This function retrieves the time remaining until the alarm fires.
- *
- * @param[out]  aTimeval  A pointer to the timeval struct.
- *
- */
-void qorvoAlarmUpdateTimeout(struct timeval *aTimeout);
-
-/**
- * This function performs alarm driver processing.
- *
- */
-void qorvoAlarmProcess(void);
-
-/**
- * This function retrieves the current time.
+ * This function retrieves the current host time in milliseconds.
  *
  * @param[out]  The current time in ms.
  *
  */
 uint32_t qorvoAlarmGetTimeMs(void);
+
+/**
+ * This function retrieves the current host time in microseconds.
+ *
+ * @param[out]  The current time in us.
+ *
+ */
+uint32_t qorvoAlarmGetTimeUs(void);
 
 /**
  * This function schedules a callback after a relative amount of time.
@@ -78,7 +72,17 @@ uint32_t qorvoAlarmGetTimeMs(void);
  * @param[in]  arg       A context pointer which will be passed as an argument to the callback.
  *
  */
-void qorvoAlarmScheduleEventArg(uint32_t rel_time, qorvoAlarmCallback_t callback, void *arg);
+void qorvoAlarmMilliStart(uint32_t rel_time, qorvoAlarmCallback_t callback, void *arg);
+
+/**
+ * This function schedules a callback after a relative amount of time.
+ *
+ * @param[in]  rel_time  The relative time in us.
+ * @param[in]  callback  A callback function which will be called.
+ * @param[in]  arg       A context pointer which will be passed as an argument to the callback.
+ *
+ */
+void qorvoAlarmMicroStart(uint32_t rel_time, qorvoAlarmCallback_t callback, void *arg);
 
 /**
  * This function unschedules the callback.
@@ -87,6 +91,6 @@ void qorvoAlarmScheduleEventArg(uint32_t rel_time, qorvoAlarmCallback_t callback
  * @param[in]  arg       A context pointer which will be passed as an argument to the callback.
  *
  */
-bool qorvoAlarmUnScheduleEventArg(qorvoAlarmCallback_t callback, void *arg);
+bool qorvoAlarmStop(qorvoAlarmCallback_t callback, void *arg);
 
 #endif // ALARM_QORVO_H_

@@ -36,6 +36,7 @@
 #include <stdint.h>
 
 #include "alarm_qorvo.h"
+#include <openthread/platform/alarm-micro.h>
 #include <openthread/platform/alarm-milli.h>
 #include <openthread/platform/diag.h>
 
@@ -44,7 +45,7 @@ uint32_t otPlatAlarmMilliGetNow(void)
     return qorvoAlarmGetTimeMs();
 }
 
-static void qorvoAlarmFired(void *aInstance)
+static void qorvoAlarmMilliFired(void *aInstance)
 {
     otPlatAlarmMilliFired((otInstance *)aInstance);
 }
@@ -52,11 +53,35 @@ static void qorvoAlarmFired(void *aInstance)
 void otPlatAlarmMilliStartAt(otInstance *aInstance, uint32_t t0, uint32_t dt)
 {
     OT_UNUSED_VARIABLE(t0);
-    qorvoAlarmUnScheduleEventArg((qorvoAlarmCallback_t)qorvoAlarmFired, aInstance);
-    qorvoAlarmScheduleEventArg(dt, qorvoAlarmFired, aInstance);
+
+    qorvoAlarmStop((qorvoAlarmCallback_t)qorvoAlarmMilliFired, aInstance);
+    qorvoAlarmMilliStart(dt, qorvoAlarmMilliFired, aInstance);
 }
 
 void otPlatAlarmMilliStop(otInstance *aInstance)
 {
-    qorvoAlarmUnScheduleEventArg((qorvoAlarmCallback_t)qorvoAlarmFired, aInstance);
+    qorvoAlarmStop((qorvoAlarmCallback_t)qorvoAlarmMilliFired, aInstance);
+}
+
+uint32_t otPlatAlarmMicroGetNow(void)
+{
+    return qorvoAlarmGetTimeUs();
+}
+
+static void qorvoAlarmMicroFired(void *aInstance)
+{
+    otPlatAlarmMicroFired((otInstance *)aInstance);
+}
+
+void otPlatAlarmMicroStartAt(otInstance *aInstance, uint32_t t0, uint32_t dt)
+{
+    OT_UNUSED_VARIABLE(t0);
+
+    qorvoAlarmStop((qorvoAlarmCallback_t)qorvoAlarmMicroFired, aInstance);
+    qorvoAlarmMicroStart(dt, qorvoAlarmMicroFired, aInstance);
+}
+
+void otPlatAlarmMicroStop(otInstance *aInstance)
+{
+    qorvoAlarmStop((qorvoAlarmCallback_t)qorvoAlarmMicroFired, aInstance);
 }
