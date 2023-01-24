@@ -62,4 +62,14 @@
 #define OPENTHREAD_CONFIG_DIAG_ENABLE 1
 #endif
 
+/**
+ * @def OPENTHREAD_CONFIG_TLS_ENABLE
+ *
+ * Define as 1 to enable support for TLS over TCP.
+ *
+ */
+#if OPENTHREAD_CONFIG_TLS_ENABLE
+#define OPENTHREAD_CONFIG_TLS_ENABLE 0
+#endif
+
 #endif // OPENTHREAD_CORE_QPG6100_CONFIG_H_
