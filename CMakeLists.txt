@@ -63,8 +63,7 @@ set(OPENTHREAD_DIR ${PROJECT_SOURCE_DIR}/openthread)
 add_subdirectory(${OPENTHREAD_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 target_compile_definitions(ot-config INTERFACE
-    OPENTHREAD_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
-    OPENTHREAD_PROJECT_CORE_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
+    OPENTHREAD_PLATFORM_CORE_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
     OPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE="openthread-core-${QORVO_PLATFORM}-config-check.h"
 )
 
