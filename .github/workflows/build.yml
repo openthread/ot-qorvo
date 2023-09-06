@@ -102,8 +102,7 @@ jobs:
     - name: Build
       run: |
         export PATH=/tmp/${{ matrix.gcc_extract_dir }}/bin:$PATH
-        script/test qpg6095
-        script/test qpg6100
+        script/test qpg6105
 
   gcc-arm-none-linux-gnueabihf:
     name: gcc-arm-none-linux-gnueabihf-${{ matrix.gcc_ver }}

@@ -31,8 +31,6 @@ project(ot-qorvo VERSION 0.1.0)
 
 set(QORVO_PLATFORM_VALUES
     "gp712"
-    "qpg6095"
-    "qpg6100"
     "qpg6105"
     "qpg7015m"
 )
