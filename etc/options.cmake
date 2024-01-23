@@ -34,3 +34,9 @@ endif()
 
 # Uart transport option
 option(OT_QORVO_SOCKET "enable socket interface for uart transport on RPi based platforms" OFF)
+
+# Number of supported children
+option(OT_QORVO_SUPPORTED_CHILDREN "The amount of children supported on the platform" OFF)
+if (OT_QORVO_SUPPORTED_CHILDREN)
+    add_definitions(-DOPENTHREAD_CONFIG_MLE_MAX_CHILDREN=${OT_QORVO_SUPPORTED_CHILDREN})
+endif()

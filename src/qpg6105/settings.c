@@ -75,7 +75,7 @@ otError otPlatSettingsGet(otInstance *aInstance, uint16_t aKey, int aIndex, uint
 
     if (error == OT_ERROR_NOT_FOUND)
     {
-        if (aValue != nullptr)
+        if (aValue != NULL)
         {
             *aValueLength = 0;
         }

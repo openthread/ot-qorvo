@@ -36,27 +36,26 @@
 
 #include <openthread/platform/diag.h>
 #include <openthread/platform/radio.h>
+#include <openthread/platform/time.h>
 
 #include "utils/code_utils.h"
 
 #include "radio_qorvo.h"
 
-#define QPG_RECEIVE_SENSITIVITY -100  // dBm
-#define QPG_CSL_ACCURACY 50           // ppm
-#define QPG_CSL_CLOCK_UNCERTAINTY 255 // 10us
+enum
+{
+    QPG_RECEIVE_SENSITIVITY   = -100, // [dBm]
+    QPG_CSL_ACCURACY          = 50,   // [ppm]
+    QPG_CSL_CLOCK_UNCERTAINTY = 255,  // [10us]
+};
 
-#define IEEE802154_MIN_LENGTH 5
-#define IEEE802154_MAX_LENGTH 127
-#define IEEE802154_ACK_LENGTH 5
-#define IEEE802154_FRAME_TYPE_MASK 0x7
-#define IEEE802154_FRAME_TYPE_ACK 0x2
-#define IEEE802154_FRAME_PENDING 1 << 4
-#define IEEE802154_ACK_REQUEST 1 << 5
-#define IEEE802154_DSN_OFFSET 2
-
-#define QORVO_RSSI_OFFSET 73
-#define QORVO_CRC_BIT_MASK 0x80
-#define QORVO_LQI_BIT_MASK 0x7f
+enum
+{
+    IEEE802154_ACK_LENGTH     = 5,
+    IEEE802154_FRAME_TYPE_ACK = 0x2,
+    IEEE802154_FRAME_PENDING  = 1 << 4,
+    IEEE802154_DSN_OFFSET     = 2,
+};
 
 extern otRadioFrame sTransmitFrame;
 
@@ -243,7 +242,15 @@ void otPlatRadioSetMacKey(otInstance             *aInstance,
 
 void otPlatRadioSetMacFrameCounter(otInstance *aInstance, uint32_t aMacFrameCounter)
 {
+    OT_UNUSED_VARIABLE(aInstance);
+
     qorvoRadioSetMacFrameCounter(aMacFrameCounter);
+}
+
+uint64_t otPlatTimeGet(void)
+{
+    // required for RCP/spinel
+    return qorvoRadioGetNow();
 }
 
 uint64_t otPlatRadioGetNow(otInstance *aInstance)
@@ -389,7 +396,7 @@ void cbQorvoRadioTxStarted(otRadioFrame *aFrame)
 
 void cbQorvoRadioTransmitDone_AckFrame(otRadioFrame *aFrame, otRadioFrame *aAckFrame, otError aError)
 {
-    otPlatRadioTxDone(pQorvoInstance, aFrame, aAckFrame, aError);
+    otPlatRadioTxDone(pQorvoInstance, aFrame, (aError == OT_ERROR_NONE) ? aAckFrame : NULL, aError);
 }
 
 void cbQorvoRadioTransmitDone(otRadioFrame *aFrame, bool aFramePending, otError aError)
@@ -410,7 +417,7 @@ void cbQorvoRadioTransmitDone(otRadioFrame *aFrame, bool aFramePending, otError 
     ackFrame.mPsdu[1] = 0;
     ackFrame.mPsdu[2] = aFrame->mPsdu[IEEE802154_DSN_OFFSET];
 
-    otPlatRadioTxDone(pQorvoInstance, aFrame, &ackFrame, aError);
+    otPlatRadioTxDone(pQorvoInstance, aFrame, (aError == OT_ERROR_NONE) ? &ackFrame : NULL, aError);
 }
 
 void cbQorvoDiagRadioTransmitDone(otRadioFrame *aFrame, otError aError)
@@ -550,7 +557,7 @@ uint8_t otPlatRadioGetCslAccuracy(otInstance *aInstance)
     return QPG_CSL_ACCURACY;
 }
 
-uint8_t otPlatRadioGetCslClockUncertainty(otInstance *aInstance)
+uint8_t otPlatRadioGetCslUncertainty(otInstance *aInstance)
 {
     OT_UNUSED_VARIABLE(aInstance);
 

@@ -32,7 +32,7 @@ list(APPEND OT_PLATFORM_DEFINES
 )
 
 target_compile_definitions(ot-config INTERFACE
-    "MBEDTLS_USER_CONFIG_FILE=\"gp712-mbedtls-config.h\""
+    "MBEDTLS_USER_CONFIG_FILE=\"${QORVO_PLATFORM}-mbedtls-config.h\""
 )
 
 list(APPEND OT_PUBLIC_INCLUDES
@@ -42,14 +42,6 @@ list(APPEND OT_PUBLIC_INCLUDES
 set(OT_PLATFORM_DEFINES ${OT_PLATFORM_DEFINES} PARENT_SCOPE)
 
 set(OT_PUBLIC_INCLUDES ${OT_PUBLIC_INCLUDES} PARENT_SCOPE)
-
-if(OT_CFLAGS MATCHES "-pedantic-errors")
-    string(REPLACE "-pedantic-errors" "" OT_CFLAGS "${OT_CFLAGS}")
-endif()
-
-if(OT_CFLAGS MATCHES "-Wno-c\\+\\+14-compat")
-    string(REPLACE "-Wno-c++14-compat" "" OT_CFLAGS "${OT_CFLAGS}")
-endif()
 
 set(PLATFORM_SOURCES
     alarm.c
@@ -72,22 +64,21 @@ else()
     )
 endif()
 
-add_library(openthread-gp712-ftd
+add_library(${PLATFORM_TARGET_FTD}
     STATIC
     ${PLATFORM_SOURCES}
 )
 
-set_target_properties(
-    openthread-gp712-ftd
+set_target_properties(${PLATFORM_TARGET_FTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 11
+        CXX_STANDARD 14
 )
 
-target_link_libraries(openthread-gp712-ftd
+target_link_libraries(${PLATFORM_TARGET_FTD}
     PRIVATE
         -Wl,--start-group
-        gp712-driver-ftd
+        ${PLATFORM_DRIVER_FTD}
         ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
@@ -98,38 +89,37 @@ target_link_libraries(openthread-gp712-ftd
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
 )
 
-target_compile_definitions(openthread-gp712-ftd
+target_compile_definitions(${PLATFORM_TARGET_FTD}
     PUBLIC
         ${OT_PLATFORM_DEFINES}
 )
 
-target_compile_options(openthread-gp712-ftd
+target_compile_options(${PLATFORM_TARGET_FTD}
     PRIVATE
         ${OT_CFLAGS}
 )
 
-target_include_directories(openthread-gp712-ftd
+target_include_directories(${PLATFORM_TARGET_FTD}
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
         ${OPENTHREAD_DIR}/examples/platforms
 )
 
-add_library(openthread-gp712-mtd
+add_library(${PLATFORM_TARGET_MTD}
     STATIC
     ${PLATFORM_SOURCES}
 )
 
-set_target_properties(
-    openthread-gp712-mtd
+set_target_properties(${PLATFORM_TARGET_MTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 11
+        CXX_STANDARD 14
 )
 
-target_link_libraries(openthread-gp712-mtd
+target_link_libraries(${PLATFORM_TARGET_MTD}
     PRIVATE
         -Wl,--start-group
-        gp712-driver-mtd
+        ${PLATFORM_DRIVER_MTD}
         ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
@@ -140,17 +130,17 @@ target_link_libraries(openthread-gp712-mtd
         -Wl,-Map=$<TARGET_PROPERTY:NAME>.map
 )
 
-target_compile_definitions(openthread-gp712-mtd
+target_compile_definitions(${PLATFORM_TARGET_MTD}
     PUBLIC
         ${OT_PLATFORM_DEFINES}
 )
 
-target_compile_options(openthread-gp712-mtd
+target_compile_options(${PLATFORM_TARGET_MTD}
     PRIVATE
         ${OT_CFLAGS}
 )
 
-target_include_directories(openthread-gp712-mtd
+target_include_directories(${PLATFORM_TARGET_MTD}
     PRIVATE
         ${OT_PUBLIC_INCLUDES}
         ${OPENTHREAD_DIR}/examples/platforms
