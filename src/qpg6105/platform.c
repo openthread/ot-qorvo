@@ -38,6 +38,7 @@
 #include "random_qorvo.h"
 #include "uart_qorvo.h"
 #include <openthread/tasklet.h>
+#include <openthread/thread.h>
 
 #include "utils/uart.h"
 
@@ -82,5 +83,8 @@ void otSysProcessDrivers(otInstance *aInstance)
         localInstance = aInstance;
     }
 
-    qorvoPlatMainLoop(!otTaskletsArePending(aInstance));
+    // Do not sleep until attached to network to handle UART CLI
+    qorvoPlatMainLoop(!otTaskletsArePending(aInstance) &&
+                      (otThreadGetDeviceRole(aInstance) != OT_DEVICE_ROLE_DETACHED) &&
+                      (otThreadGetDeviceRole(aInstance) != OT_DEVICE_ROLE_DISABLED));
 }

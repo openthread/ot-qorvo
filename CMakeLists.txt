@@ -34,16 +34,23 @@ set(QORVO_PLATFORM_VALUES
     "qpg6105"
     "qpg7015m"
 )
+set(QORVO_MBEDTLS_USED
+    "qpg6105"
+)
+
 set_property(CACHE QORVO_PLATFORM PROPERTY STRINGS ${QORVO_PLATFORM_VALUES})
 if(NOT QORVO_PLATFORM IN_LIST QORVO_PLATFORM_VALUES)
     message(FATAL_ERROR "Please select a supported platform: ${QORVO_PLATFORM_VALUES}")
 endif()
 
-set(OT_PLATFORM_LIB_FTD "openthread-${QORVO_PLATFORM}-ftd")
-set(OT_PLATFORM_LIB_MTD "openthread-${QORVO_PLATFORM}-mtd")
-set(OT_PLATFORM_LIB_RCP "openthread-${QORVO_PLATFORM}-ftd")
-set(OT_PLATFORM_LIB "openthread-${QORVO_PLATFORM}-ftd")
-
+if (QORVO_PLATFORM IN_LIST QORVO_MBEDTLS_USED)
+    set(OT_BUILTIN_MBEDTLS_MANAGEMENT OFF CACHE BOOL "disable builtin mbedtls management" FORCE)
+    set(OT_EXTERNAL_MBEDTLS "qorvo-mbedtls" CACHE STRING "use qorvo mbedtls" FORCE)
+    set(OT_MBEDTLS ${OT_EXTERNAL_MBEDTLS})
+    set(QORVO_MBEDTLS 1)
+else()
+    set(QORVO_MBEDTLS 0)
+endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -53,7 +60,22 @@ if (DEFINED ENV{QORVO_OT_SDK})
     SET(SDK_DIR "$ENV{QORVO_OT_SDK}")
 else()
     SET(SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Qorvo/repo")
+    if(NOT EXISTS ${SDK_DIR}/${QORVO_PLATFORM})
+        message(FATAL_ERROR "Please select a correct SDK directory: ${SDK_DIR}/${QORVO_PLATFORM} does not exist")
+    endif()
 endif()
+
+set(PLATFORM_TARGET_FTD "openthread-${QORVO_PLATFORM}-ftd")
+set(PLATFORM_DRIVER_FTD "${QORVO_PLATFORM}-driver-ftd")
+set(OT_PLATFORM_LIB_FTD "${PLATFORM_TARGET_FTD}")
+
+set(PLATFORM_TARGET_MTD "openthread-${QORVO_PLATFORM}-mtd")
+set(PLATFORM_DRIVER_MTD "${QORVO_PLATFORM}-driver-mtd")
+set(OT_PLATFORM_LIB_MTD "${PLATFORM_TARGET_MTD}")
+
+set(PLATFORM_TARGET_RCP "openthread-${QORVO_PLATFORM}-ftd")
+set(PLATFORM_DRIVER_RCP "${QORVO_PLATFORM}-driver-ftd")
+set(OT_PLATFORM_LIB_RCP "${PLATFORM_TARGET_RCP}")
 
 include("${PROJECT_SOURCE_DIR}/etc/options.cmake")
 
@@ -61,7 +83,8 @@ set(OPENTHREAD_DIR ${PROJECT_SOURCE_DIR}/openthread)
 add_subdirectory(${OPENTHREAD_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 target_compile_definitions(ot-config INTERFACE
-    OPENTHREAD_PLATFORM_CORE_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
+    OPENTHREAD_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
+    OPENTHREAD_PROJECT_CORE_CONFIG_FILE="openthread-core-${QORVO_PLATFORM}-config.h"
     OPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE="openthread-core-${QORVO_PLATFORM}-config-check.h"
 )
 

@@ -217,14 +217,4 @@
 #define OPENTHREAD_CONFIG_HEAP_INTERNAL_SIZE (2048 * sizeof(void *))
 #endif
 
-/**
- * @def OPENTHREAD_CONFIG_TLS_ENABLE
- *
- * Define as 1 to enable support for TLS over TCP.
- *
- */
-#ifndef OPENTHREAD_CONFIG_TLS_ENABLE
-#define OPENTHREAD_CONFIG_TLS_ENABLE 0
-#endif
-
 #endif // OPENTHREAD_CORE_QPG7015M_CONFIG_H_
