@@ -83,17 +83,22 @@ main()
     local cmdline_options=("$@")
 
     case "${platform}" in
-        gp712 | qpg7015m)
+        gp712)
+            OT_CMAKE_NINJA_TARGET=("ot-cli-ftd" "ot-cli-mtd")
+            options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
+            build -DQORVO_PLATFORM="${platform}" -DOT_THREAD_VERSION="1.1" "${options[@]}" "${cmdline_options[@]}"
+            ;;
+        qpg7015m)
             OT_CMAKE_NINJA_TARGET=("ot-rcp" "ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-linux-gnueabihf.cmake")
+            build -DQORVO_PLATFORM="${platform}" "${options[@]}" "${cmdline_options[@]}"
             ;;
         qpg6105)
             OT_CMAKE_NINJA_TARGET=("ot-cli-ftd" "ot-cli-mtd")
             options+=("-DCMAKE_TOOLCHAIN_FILE=src/${platform}/arm-none-eabi.cmake")
+            build -DQORVO_PLATFORM="${platform}" "${options[@]}" "${cmdline_options[@]}"
             ;;
     esac
-
-    build -DQORVO_PLATFORM="${platform}" "${options[@]}" "${cmdline_options[@]}"
 
     case "${platform}" in
         qpg6105)
