@@ -31,29 +31,30 @@ message(STATUS "Qorvo ${QORVO_PLATFORM} libs in ${SDK_DIR}/${QORVO_PLATFORM}")
 string(TOUPPER ${QORVO_PLATFORM} QORVO_PLATFORM_UPPER)
 
 # setting defaults for the variables
-set(MBEDTLSALT "")
 set(MBEDCRYPTO "")
 
 # mbedtls
 if (${QORVO_MBEDTLS})
     if (DEFINED ENV{QORVO_OT_MBEDTLS_SDK})
-        SET(QORVO_MBEDTLS_DIR "$ENV{QORVO_OT_MBEDTLS_SDK}")
+        set(QORVO_MBEDTLS_SDK_DIR "$ENV{QORVO_OT_MBEDTLS_SDK}")
     else()
-        SET(QORVO_MBEDTLS_DIR "${SDK_DIR}")
+        set(QORVO_MBEDTLS_SDK_DIR "${SDK_DIR}/qorvo-mbedtls/mbedtls/v3.3.0")
     endif()
-    set(MBEDTLSALT "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
-    set(QORVO_MBEDTLS_SDK_DIR "${QORVO_MBEDTLS_DIR}/qorvo-mbedtls/")
-    if(NOT EXISTS ${QORVO_MBEDTLS_SDK_DIR}/mbedtls/v3.3.0/include/mbedtls)
-        message(FATAL_ERROR "'${QORVO_MBEDTLS_SDK_DIR}/mbedtls/v3.3.0/include/mbedtls' does not exist. Try setting 'QORVO_OT_SDK' or 'QORVO_OT_MBEDTLS_SDK'")
+
+    if (DEFINED ENV{QORVO_OT_MBEDTLS_ALT_CONFIG})
+        set(QORVO_MBEDTLS_ALT_CONFIG "$ENV{QORVO_OT_MBEDTLS_ALT_CONFIG}")
+    else()
+        set(QORVO_MBEDTLS_ALT_CONFIG "${SDK_DIR}/${QORVO_PLATFORM}/inc")
+    endif()
+
+    set(MBEDCRYPTO "${SDK_DIR}/${QORVO_PLATFORM}/lib/libmbedtls_alt.a")
+
+    if(NOT EXISTS ${QORVO_MBEDTLS_SDK_DIR}/include/mbedtls)
+        message(FATAL_ERROR "'${QORVO_MBEDTLS_SDK_DIR}/include/mbedtls' does not exist. Try setting 'QORVO_OT_SDK' or 'QORVO_OT_MBEDTLS_SDK'")
     endif()
     message(STATUS "Including Qorvo MBEDTLS - ${QORVO_MBEDTLS_SDK_DIR}")
 
-    include(${QORVO_MBEDTLS_SDK_DIR}/mbedtls.cmake)
-
-    list(APPEND OT_PUBLIC_INCLUDES "${QORVO_MBEDTLS_SDK_DIR}/mbedtls/v3.3.0/include/mbedtls")
-    list(APPEND OT_PUBLIC_INCLUDES "${QORVO_MBEDTLS_SDK_DIR}/inc")
-
-    set(OT_PUBLIC_INCLUDES ${OT_PUBLIC_INCLUDES} PARENT_SCOPE)
+    include(qorvo-mbedtls.cmake)
 else()
     set(MBEDCRYPTO "mbedcrypto")
 endif()
@@ -66,7 +67,6 @@ foreach(TYPE "FTD" "MTD")
     target_link_libraries(${PLATFORM_DRIVER_${TYPE}}
         INTERFACE
             ${QORVO_PLATFORM_LIB_${TYPE}}
-            ${MBEDTLSALT}
             ${MBEDCRYPTO}
     )
 endforeach()

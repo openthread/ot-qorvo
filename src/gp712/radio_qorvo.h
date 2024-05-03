@@ -39,6 +39,7 @@
 #include <stdint.h>
 
 #include <openthread/error.h>
+#include <openthread/thread_ftd.h>
 #include <openthread/platform/radio.h>
 
 /**
@@ -315,6 +316,36 @@ otError qorvoRadioReceiveAt(uint8_t aChannel, uint32_t aStart, uint32_t aDuratio
  * @returns    caps       The radio capabilities as described in include/openthread/platform/radio.h
  */
 otRadioCaps qorvoRadioGetCaps(void);
+
+/**
+ * Register the NeighbourTable callback with the openthread stack.
+ *
+ */
+void qorvoRegisterNeighbourTableCallback(bool enable);
+
+/**
+ * Callback to notify the radio which Neighbour was added removed
+ *
+ */
+void qorvoNeighbourTableChanged(otNeighborTableEvent aEvent, const otNeighborTableEntryInfo *aEntryInfo);
+
+/**
+ * This function is called when OpenThread adds a Child to the Neigbour table.
+ *
+ * @param[in]  aShortAddress    The child's rloc16
+ * @param[in]  aExtAddress      The child's extended address
+ *
+ */
+void qorvoRadioHandleChildAdded(uint16_t aShortAddress, const uint8_t *aExtAddress);
+
+/**
+ * This function is called when OpenThread removes a Child from the Neigbour table.
+ *
+ * @param[in]  aShortAddress    The child's rloc16
+ * @param[in]  aExtAddress      The child's extended address
+ *
+ */
+void qorvoRadioHandleChildRemoved(uint16_t aShortAddress, const uint8_t *aExtAddress);
 
 /**
  * This callback is called when the energy scan is finished.

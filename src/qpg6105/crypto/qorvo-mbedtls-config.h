@@ -26,66 +26,40 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @file
- * @brief
- *   This file includes the platform-specific initializers.
- */
+#pragma once
 
-#include "alarm_qorvo.h"
-#include "platform_qorvo.h"
-#include "radio_qorvo.h"
-#include "random_qorvo.h"
-#include "uart_qorvo.h"
-#include <openthread/tasklet.h>
-#include <openthread/thread.h>
+#ifdef QORVO_MBEDTLS_DEBUG
+#ifndef MBEDTLS_DEBUG_C
+#define MBEDTLS_DEBUG_C
+#endif // MBEDTLS_DEBUG_C
+#endif // QORVO_MBEDTLS_DEBUG
 
-#include "utils/uart.h"
+// Enables secured CoAP, not used by Thread nor Matter
+#ifndef OPENTHREAD_CONFIG_COAP_SECURE_API_ENABLE
+#define OPENTHREAD_CONFIG_COAP_SECURE_API_ENABLE 0
+#endif // OPENTHREAD_CONFIG_COAP_SECURE_API_ENABLE
 
-#include "stdio.h"
-#include "stdlib.h"
+// Required for SRP client and server and thus in Thread 1.2 and Matter
+#ifndef OPENTHREAD_CONFIG_ECDSA_ENABLE
+#define OPENTHREAD_CONFIG_ECDSA_ENABLE 1
+#endif // OPENTHREAD_CONFIG_ECDSA_ENABLE
 
-static otInstance *localInstance = NULL;
+// Enables the optional Thread Commissioner feature
+#ifndef OPENTHREAD_CONFIG_COMMISSIONER_ENABLE
+#define OPENTHREAD_CONFIG_COMMISSIONER_ENABLE 0
+#endif // OPENTHREAD_CONFIG_COMMISSIONER_ENABLE
 
-uint8_t qorvoPlatGotoSleepCheck(void)
-{
-    if (localInstance)
-    {
-        return !otTaskletsArePending(localInstance);
-    }
-    else
-    {
-        return true;
-    }
-}
+// Enables TCP, Mandatory for Thread Components, optional for Thread Products
+#ifndef OPENTHREAD_CONFIG_TCP_ENABLE
+#define OPENTHREAD_CONFIG_TCP_ENABLE 0
+#endif // OPENTHREAD_CONFIG_TCP_ENABLE
 
-void otSysInit(int argc, char *argv[])
-{
-    OT_UNUSED_VARIABLE(argc);
-    OT_UNUSED_VARIABLE(argv);
+// Enables the Thread Joiner role, Mandatory for Thread Components, optional for Thread Products
+#ifndef OPENTHREAD_CONFIG_JOINER_ENABLE
+#define OPENTHREAD_CONFIG_JOINER_ENABLE 0
+#endif // OPENTHREAD_CONFIG_JOINER_ENABLE
 
-    qorvoPlatInit((qorvoPlatGotoSleepCheckCallback_t)qorvoPlatGotoSleepCheck);
-    qorvoUartInit();
-    qorvoAlarmInit();
-    qorvoRandomInit();
-    qorvoRadioInit();
-}
-
-bool otSysPseudoResetWasRequested(void)
-{
-    return false;
-}
-
-void otSysProcessDrivers(otInstance *aInstance)
-{
-    if (localInstance == NULL)
-    {
-        // local copy in case we need to perform a callback.
-        localInstance = aInstance;
-    }
-
-    // Do not sleep until attached to network to handle UART CLI
-    qorvoPlatMainLoop(!otTaskletsArePending(aInstance) &&
-                      (otThreadGetDeviceRole(aInstance) != OT_DEVICE_ROLE_DETACHED) &&
-                      (otThreadGetDeviceRole(aInstance) != OT_DEVICE_ROLE_DISABLED));
-}
+// Enables the Thread Border Agent functionality, Mandatory on Border Routers
+#ifndef OPENTHREAD_CONFIG_BORDER_AGENT_ENABLE
+#define OPENTHREAD_CONFIG_BORDER_AGENT_ENABLE 0
+#endif // OPENTHREAD_CONFIG_BORDER_AGENT_ENABLE

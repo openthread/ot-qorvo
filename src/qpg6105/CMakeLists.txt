@@ -27,7 +27,7 @@
 #
 
 target_compile_definitions(ot-config INTERFACE
-    "MBEDTLS_CONFIG_FILE=\"${QORVO_PLATFORM}-mbedtls-config.h\""
+    "MBEDTLS_CONFIG_FILE=\"${SDK_DIR}/${QORVO_PLATFORM}/inc/${QORVO_PLATFORM}-mbedtls-config.h\""
 )
 
 list(APPEND OT_PUBLIC_INCLUDES
@@ -47,6 +47,7 @@ set(PLATFORM_SOURCES
     platform.c
     radio.c
     settings.c
+    syscalls_stubs.c
     uart.c
 )
 
@@ -58,14 +59,14 @@ add_library(${PLATFORM_TARGET_FTD}
 set_target_properties(${PLATFORM_TARGET_FTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 14
+        CXX_STANDARD 20
 )
 
 target_link_libraries(${PLATFORM_TARGET_FTD}
     PRIVATE
+        -lc # Required to rearrange linking order to pick up syscalls stubs for libc
         -Wl,--start-group
         ${PLATFORM_DRIVER_FTD}
-        ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
     PUBLIC
@@ -99,14 +100,14 @@ add_library(${PLATFORM_TARGET_MTD}
 set_target_properties(${PLATFORM_TARGET_MTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 14
+        CXX_STANDARD 20
 )
 
 target_link_libraries(${PLATFORM_TARGET_MTD}
     PRIVATE
+        -lc # Required to rearrange linking order to pick up syscalls stubs for libc
         -Wl,--start-group
         ${PLATFORM_DRIVER_MTD}
-        ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
     PUBLIC

@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2019, The OpenThread Authors.
+#  Copyright (c) 2021, The OpenThread Authors.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -26,38 +26,37 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Additional debugging option
-option(OT_MBEDTLS_DEBUG "enable Mbedtls debugging" OFF)
-if (OT_MBEDTLS_DEBUG)
-    add_definitions(-DQORVO_MBEDTLS_DEBUG)
-endif()
-
-# Uart transport option
-option(OT_QORVO_SOCKET "enable socket interface for uart transport on RPi based platforms" OFF)
-
-# Number of supported children
-option(OT_QORVO_SUPPORTED_CHILDREN "The amount of children supported on the platform" OFF)
-if (OT_QORVO_SUPPORTED_CHILDREN)
-    add_definitions(-DOPENTHREAD_CONFIG_MLE_MAX_CHILDREN=${OT_QORVO_SUPPORTED_CHILDREN})
-endif()
-
-option(OT_COMMISSIONER "Enable Commissioner role (disabled by default)" OFF)
-if (OT_COMMISSIONER)
-    add_definitions(-DOPENTHREAD_CONFIG_COMMISSIONER_ENABLE=1)
+if (DEFINED ENV{QORVO_OT_MBEDTLS_ALT_DIR})
+    set(QORVO_MBEDTLS_ALT_DIR "$ENV{QORVO_OT_MBEDTLS_ALT_DIR}")
 else()
-    add_definitions(-DOPENTHREAD_CONFIG_COMMISSIONER_ENABLE=0)
+    set(QORVO_MBEDTLS_ALT_DIR "${QORVO_MBEDTLS_SDK_DIR}/../../mbedtls_alt_3.3.0/")
 endif()
 
-option(OT_JOINER "Enable Joiner role (enabled by default)" ON)
-if (OT_JOINER)
-    add_definitions(-DOPENTHREAD_CONFIG_JOINER_ENABLE=1)
-else()
-    add_definitions(-DOPENTHREAD_CONFIG_JOINER_ENABLE=0)
-endif()
+message(STATUS "Adding static lib `qorvo-mbedtls` from ${MBEDCRYPTO}")
+add_library(qorvo-mbedtls STATIC IMPORTED GLOBAL)
 
-option(OT_TCP "Enabled TCP/TLS (disabled by default)" OFF)
-if (OT_TCP)
-    add_definitions(-DOPENTHREAD_CONFIG_TCP_ENABLE=1)
-else()
-    add_definitions(-DOPENTHREAD_CONFIG_TCP_ENABLE=0)
-endif()
+set(INCLUDE_DIRS "${QORVO_MBEDTLS_SDK_DIR}/include"
+                 "${QORVO_MBEDTLS_SDK_DIR}/include/mbedtls"
+                 "${QORVO_MBEDTLS_SDK_DIR}/include/psa"
+                 "${QORVO_MBEDTLS_ALT_DIR}"
+                 "${QORVO_MBEDTLS_ALT_CONFIG}"
+)
+set_target_properties(qorvo-mbedtls
+    PROPERTIES
+        C_STANDARD 99
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        CXX_EXTENSIONS OFF
+        IMPORTED_LOCATION "${MBEDCRYPTO}"
+        INTERFACE_INCLUDE_DIRECTORIES "${INCLUDE_DIRS}"
+)
+
+# target_include_directories(qorvo-mbedtls
+#     INTERFACE
+#         ${QORVO_MBEDTLS_SDK_DIR}/include
+#         ${QORVO_MBEDTLS_SDK_DIR}/include/mbedtls
+#         ${QORVO_MBEDTLS_SDK_DIR}/include/psa
+#         ${QORVO_MBEDTLS_ALT_DIR}
+#         ${QORVO_MBEDTLS_ALT_CONFIG}
+# )
+
