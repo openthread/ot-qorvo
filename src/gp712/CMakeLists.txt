@@ -72,14 +72,13 @@ add_library(${PLATFORM_TARGET_FTD}
 set_target_properties(${PLATFORM_TARGET_FTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 14
+        CXX_STANDARD 20
 )
 
 target_link_libraries(${PLATFORM_TARGET_FTD}
     PRIVATE
         -Wl,--start-group
         ${PLATFORM_DRIVER_FTD}
-        ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
     PUBLIC
@@ -113,14 +112,13 @@ add_library(${PLATFORM_TARGET_MTD}
 set_target_properties(${PLATFORM_TARGET_MTD}
     PROPERTIES
         C_STANDARD 99
-        CXX_STANDARD 14
+        CXX_STANDARD 20
 )
 
 target_link_libraries(${PLATFORM_TARGET_MTD}
     PRIVATE
         -Wl,--start-group
         ${PLATFORM_DRIVER_MTD}
-        ${OT_MBEDTLS}
         ot-config
         -Wl,--end-group
     PUBLIC

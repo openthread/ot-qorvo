@@ -500,3 +500,45 @@ otError otPlatRadioGetRegion(otInstance *aInstance, uint16_t *aRegionCode)
 
     return OT_ERROR_NOT_IMPLEMENTED;
 }
+
+#if QORVO_FTD
+#include <openthread/thread_ftd.h>
+
+void qorvoNeighbourTableChanged(otNeighborTableEvent aEvent, const otNeighborTableEntryInfo *aEntryInfo)
+{
+    if (aEvent == OT_NEIGHBOR_TABLE_EVENT_CHILD_REMOVED)
+    {
+        qorvoRadioHandleChildRemoved(aEntryInfo->mInfo.mChild.mRloc16, aEntryInfo->mInfo.mChild.mExtAddress.m8);
+    }
+    else if (aEvent == OT_NEIGHBOR_TABLE_EVENT_CHILD_ADDED)
+    {
+        qorvoRadioHandleChildAdded(aEntryInfo->mInfo.mChild.mRloc16, aEntryInfo->mInfo.mChild.mExtAddress.m8);
+    }
+    // We don't care about the other events
+}
+
+#if QORVO_FTD
+void qorvoRegisterNeighbourTableCallback(bool aEnable)
+{
+    otThreadRegisterNeighborTableCallback(pQorvoInstance, (aEnable) ? qorvoNeighbourTableChanged : NULL);
+}
+#else
+extern void rcpRegisterNeighborTableCallback(bool aEnable);
+
+void qorvoRegisterNeighbourTableCallback(bool aEnable)
+{
+    rcpRegisterNeighborTableCallback(aEnable);
+}
+
+OT_TOOL_WEAK void qorvoRadioHandleChildAdded(uint16_t aShortAddress, const uint8_t *aExtAddress)
+{
+}
+OT_TOOL_WEAK void qorvoRadioHandleChildRemoved(uint16_t aShortAddress, const uint8_t *aExtAddress)
+{
+}
+#endif // QORVO_FTD
+#else
+OT_TOOL_WEAK void qorvoRegisterNeighbourTableCallback(bool aEnable)
+{
+}
+#endif // QORVO_RCP || QORVO_FTD
