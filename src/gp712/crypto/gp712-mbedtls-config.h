@@ -39,6 +39,4 @@
 #endif // MBEDTLS_DEBUG_C
 #endif // QORVO_MBEDTLS_DEBUG
 
-#include "mbedtls/check_config.h"
-
 #endif // GP712_MBEDTLS_CONFIG_H
