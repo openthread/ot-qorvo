@@ -32,10 +32,12 @@ project(ot-qorvo VERSION 0.1.0)
 set(QORVO_PLATFORM_VALUES
     "gp712"
     "qpg6105"
+    "qpg6200"
     "qpg7015m"
 )
 set(QORVO_MBEDTLS_USED
     "qpg6105"
+    "qpg6200"
 )
 
 set_property(CACHE QORVO_PLATFORM PROPERTY STRINGS ${QORVO_PLATFORM_VALUES})
